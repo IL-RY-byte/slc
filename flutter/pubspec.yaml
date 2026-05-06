@@ -1,0 +1,50 @@
+name: slc_scanner
+description: Second-Life Couture pattern scanner — production build with ML pipeline.
+publish_to: 'none'
+version: 0.2.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Camera access
+  camera: ^0.10.5+9
+  permission_handler: ^11.0.1
+
+  # Typography — Cormorant Garamond + JetBrains Mono via Google Fonts CDN
+  google_fonts: ^6.1.0
+
+  # Networking (registry provenance lookup)
+  http: ^1.1.0
+
+  # Telemetry counters (in-app only, no remote upload by default)
+  shared_preferences: ^2.2.2
+
+  # TFLite inference (Android + iOS non-LiDAR fallback for MiDaS + macro CNN)
+  # tflite_flutter: ^0.10.4   # uncomment when ML models are bundled
+
+  # Google ML Kit — alternative to raw TFLite for object detection on Android
+  # google_mlkit_object_detection: ^0.12.0   # uncomment for Stage 1 Android path
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/models/macro_cnn.onnx          # macro CNN
+    - assets/models/midas_small.onnx        # MiDaS monocular depth (web + non-LiDAR)
+    #   - assets/models/tile_detector.onnx    # YOLOv8-nano-seg (add after: python scripts/export_yolo_onnx.py)
+    #   - assets/models/macro_cnn.mlpackage  # CoreML iOS  — export on macOS
+    #   - assets/models/macro_cnn.tflite     # TFLite INT8 Android — export on macOS/Linux
+    #   - assets/models/tile_detector.tflite   # YOLOv8-seg — Stage 1 (not yet trained)
+    #   - assets/models/midas_small.mlpackage  # MiDaS CoreML iOS — run export_midas.py on macOS
+    #   - assets/models/midas_small.tflite     # MiDaS TFLite Android — run export_midas.py on Linux

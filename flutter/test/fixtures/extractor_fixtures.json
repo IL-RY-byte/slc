@@ -1,0 +1,4004 @@
+[
+  {
+    "id_hex": "0x05A1B2C3",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 5,
+      "height": 161,
+      "angles": 178,
+      "micro": 195,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 5,
+      "height": 56,
+      "angles": 178,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x05A1B2C3",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 5,
+      "height": 161,
+      "angles": 178,
+      "micro": 195,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 5,
+      "height": 55,
+      "angles": 178,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x05A1B2C3",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 5,
+      "height": 161,
+      "angles": 178,
+      "micro": 195,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 5,
+      "height": 0,
+      "angles": 178,
+      "rs": [
+        157,
+        210,
+        113,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x07F3D401",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 7,
+      "height": 243,
+      "angles": 212,
+      "micro": 1,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 7,
+      "height": 115,
+      "angles": 212,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    }
+  },
+  {
+    "id_hex": "0x07F3D401",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 7,
+      "height": 243,
+      "angles": 212,
+      "micro": 1,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 7,
+      "height": 113,
+      "angles": 212,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    }
+  },
+  {
+    "id_hex": "0x07F3D401",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 7,
+      "height": 243,
+      "angles": 212,
+      "micro": 1,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 7,
+      "height": 33,
+      "angles": 212,
+      "rs": [
+        222,
+        162,
+        37,
+        120
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12345678",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 52,
+      "angles": 86,
+      "micro": 120,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 87,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12345678",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 52,
+      "angles": 86,
+      "micro": 120,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 87,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12345678",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 52,
+      "angles": 86,
+      "micro": 120,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 87,
+      "rs": [
+        84,
+        86,
+        32,
+        42
+      ]
+    }
+  },
+  {
+    "id_hex": "0x1ABCDEF0",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 10,
+      "height": 188,
+      "angles": 222,
+      "micro": 240,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 8,
+      "height": 84,
+      "angles": 85,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0x1ABCDEF0",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 10,
+      "height": 188,
+      "angles": 222,
+      "micro": 240,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 8,
+      "height": 83,
+      "angles": 85,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0x1ABCDEF0",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 10,
+      "height": 188,
+      "angles": 222,
+      "micro": 240,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 8,
+      "height": 11,
+      "angles": 85,
+      "rs": [
+        118,
+        56,
+        216,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0x2DCA3791",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 13,
+      "height": 202,
+      "angles": 55,
+      "micro": 145,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 13,
+      "height": 70,
+      "angles": 55,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0x2DCA3791",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 13,
+      "height": 202,
+      "angles": 55,
+      "micro": 145,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 13,
+      "height": 69,
+      "angles": 55,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0x2DCA3791",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 13,
+      "height": 202,
+      "angles": 55,
+      "micro": 145,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 13,
+      "height": 0,
+      "angles": 55,
+      "rs": [
+        150,
+        110,
+        32,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0x23456789",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 3,
+      "height": 69,
+      "angles": 103,
+      "micro": 137,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 3,
+      "height": 0,
+      "angles": 103,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    }
+  },
+  {
+    "id_hex": "0x23456789",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 3,
+      "height": 69,
+      "angles": 103,
+      "micro": 137,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 3,
+      "height": 0,
+      "angles": 103,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    }
+  },
+  {
+    "id_hex": "0x23456789",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 2,
+      "count": 3,
+      "height": 69,
+      "angles": 103,
+      "micro": 137,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    },
+    "extracted": {
+      "macro": 2,
+      "count": 3,
+      "height": 0,
+      "angles": 103,
+      "rs": [
+        136,
+        104,
+        232,
+        128
+      ]
+    }
+  },
+  {
+    "id_hex": "0x3F0E1D2C",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 15,
+      "height": 14,
+      "angles": 29,
+      "micro": 44,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 11,
+      "height": 0,
+      "angles": 60,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    }
+  },
+  {
+    "id_hex": "0x3F0E1D2C",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 15,
+      "height": 14,
+      "angles": 29,
+      "micro": 44,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 11,
+      "height": 0,
+      "angles": 60,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    }
+  },
+  {
+    "id_hex": "0x3F0E1D2C",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 15,
+      "height": 14,
+      "angles": 29,
+      "micro": 44,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 6,
+      "height": 0,
+      "angles": 186,
+      "rs": [
+        85,
+        179,
+        145,
+        119
+      ]
+    }
+  },
+  {
+    "id_hex": "0x31415926",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 1,
+      "height": 65,
+      "angles": 89,
+      "micro": 38,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 4,
+      "angles": 90,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x31415926",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 1,
+      "height": 65,
+      "angles": 89,
+      "micro": 38,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": 90,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x31415926",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 1,
+      "height": 65,
+      "angles": 89,
+      "micro": 38,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": 90,
+      "rs": [
+        245,
+        188,
+        173,
+        235
+      ]
+    }
+  },
+  {
+    "id_hex": "0x4B5C6D7E",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 11,
+      "height": 92,
+      "angles": 109,
+      "micro": 126,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 9,
+      "height": 0,
+      "angles": 199,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    }
+  },
+  {
+    "id_hex": "0x4B5C6D7E",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 11,
+      "height": 92,
+      "angles": 109,
+      "micro": 126,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 9,
+      "height": 0,
+      "angles": 199,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    }
+  },
+  {
+    "id_hex": "0x4B5C6D7E",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 11,
+      "height": 92,
+      "angles": 109,
+      "micro": 126,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 9,
+      "height": 0,
+      "angles": 200,
+      "rs": [
+        38,
+        167,
+        36,
+        161
+      ]
+    }
+  },
+  {
+    "id_hex": "0x41414141",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 1,
+      "height": 65,
+      "angles": 65,
+      "micro": 65,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": 0,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    }
+  },
+  {
+    "id_hex": "0x41414141",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 1,
+      "height": 65,
+      "angles": 65,
+      "micro": 65,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": 0,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    }
+  },
+  {
+    "id_hex": "0x41414141",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 1,
+      "height": 65,
+      "angles": 65,
+      "micro": 65,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": 129,
+      "rs": [
+        92,
+        242,
+        107,
+        197
+      ]
+    }
+  },
+  {
+    "id_hex": "0x5A5B5C5D",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 10,
+      "height": 91,
+      "angles": 92,
+      "micro": 93,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 8,
+      "height": 0,
+      "angles": 6,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    }
+  },
+  {
+    "id_hex": "0x5A5B5C5D",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 10,
+      "height": 91,
+      "angles": 92,
+      "micro": 93,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 9,
+      "height": 1,
+      "angles": 138,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    }
+  },
+  {
+    "id_hex": "0x5A5B5C5D",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 10,
+      "height": 91,
+      "angles": 92,
+      "micro": 93,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 9,
+      "height": 0,
+      "angles": 138,
+      "rs": [
+        223,
+        190,
+        98,
+        3
+      ]
+    }
+  },
+  {
+    "id_hex": "0x59AABBCC",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 9,
+      "height": 170,
+      "angles": 187,
+      "micro": 204,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 9,
+      "height": 59,
+      "angles": 187,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    }
+  },
+  {
+    "id_hex": "0x59AABBCC",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 9,
+      "height": 170,
+      "angles": 187,
+      "micro": 204,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 9,
+      "height": 57,
+      "angles": 187,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    }
+  },
+  {
+    "id_hex": "0x59AABBCC",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 9,
+      "height": 170,
+      "angles": 187,
+      "micro": 204,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 9,
+      "height": 0,
+      "angles": 187,
+      "rs": [
+        240,
+        143,
+        181,
+        78
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6E7F8091",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 14,
+      "height": 127,
+      "angles": 128,
+      "micro": 145,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 14,
+      "height": 14,
+      "angles": 128,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6E7F8091",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 14,
+      "height": 127,
+      "angles": 128,
+      "micro": 145,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 14,
+      "height": 14,
+      "angles": 128,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6E7F8091",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 14,
+      "height": 127,
+      "angles": 128,
+      "micro": 145,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 14,
+      "height": 0,
+      "angles": 128,
+      "rs": [
+        89,
+        48,
+        191,
+        214
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6CAFE000",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 12,
+      "height": 175,
+      "angles": 224,
+      "micro": 0,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 12,
+      "height": 54,
+      "angles": 224,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6CAFE000",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 12,
+      "height": 175,
+      "angles": 224,
+      "micro": 0,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 12,
+      "height": 53,
+      "angles": 224,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    }
+  },
+  {
+    "id_hex": "0x6CAFE000",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 6,
+      "count": 12,
+      "height": 175,
+      "angles": 224,
+      "micro": 0,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    },
+    "extracted": {
+      "macro": 6,
+      "count": 12,
+      "height": 0,
+      "angles": 224,
+      "rs": [
+        210,
+        26,
+        139,
+        96
+      ]
+    }
+  },
+  {
+    "id_hex": "0x71F082A4",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 1,
+      "height": 240,
+      "angles": 130,
+      "micro": 164,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 1,
+      "height": 117,
+      "angles": 193,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    }
+  },
+  {
+    "id_hex": "0x71F082A4",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 1,
+      "height": 240,
+      "angles": 130,
+      "micro": 164,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 1,
+      "height": 116,
+      "angles": 193,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    }
+  },
+  {
+    "id_hex": "0x71F082A4",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 1,
+      "height": 240,
+      "angles": 130,
+      "micro": 164,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 1,
+      "height": 37,
+      "angles": 194,
+      "rs": [
+        209,
+        140,
+        75,
+        177
+      ]
+    }
+  },
+  {
+    "id_hex": "0x7DEADBEF",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 13,
+      "height": 234,
+      "angles": 219,
+      "micro": 239,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 11,
+      "height": 91,
+      "angles": 0,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    }
+  },
+  {
+    "id_hex": "0x7DEADBEF",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 13,
+      "height": 234,
+      "angles": 219,
+      "micro": 239,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 11,
+      "height": 90,
+      "angles": 0,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    }
+  },
+  {
+    "id_hex": "0x7DEADBEF",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 13,
+      "height": 234,
+      "angles": 219,
+      "micro": 239,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 11,
+      "height": 15,
+      "angles": 0,
+      "rs": [
+        132,
+        138,
+        146,
+        63
+      ]
+    }
+  },
+  {
+    "id_hex": "0x8F9E0D1C",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 15,
+      "height": 158,
+      "angles": 13,
+      "micro": 28,
+      "rs": [
+        128,
+        145,
+        174,
+        191
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 11,
+      "height": 33,
+      "angles": 211,
+      "rs": [
+        128,
+        145,
+        174,
+        191
+      ]
+    }
+  },
+  {
+    "id_hex": "0x8F9E0D1C",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 15,
+      "height": 158,
+      "angles": 13,
+      "micro": 28,
+      "rs": [
+        128,
+        145,
+        174,
+        191
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 11,
+      "height": 33,
+      "angles": 211,
+      "rs": [
+        128,
+        145,
+        174,
+        191
+      ]
+    }
+  },
+  {
+    "id_hex": "0x8F9E0D1C",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 15,
+      "height": 158,
+      "angles": 13,
+      "micro": 28,
+      "rs": [
+        128,
+        145,
+        174,
+        191
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 11,
+      "height": 0,
+      "angles": 211,
+      "rs": [
+        128,
+        1,
+        174,
+        3
+      ]
+    }
+  },
+  {
+    "id_hex": "0x80808080",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 0,
+      "height": 128,
+      "angles": 128,
+      "micro": 128,
+      "rs": [
+        112,
+        48,
+        114,
+        50
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 1,
+      "height": 34,
+      "angles": null,
+      "rs": [
+        112,
+        48,
+        114,
+        50
+      ]
+    }
+  },
+  {
+    "id_hex": "0x80808080",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 0,
+      "height": 128,
+      "angles": 128,
+      "micro": 128,
+      "rs": [
+        112,
+        48,
+        114,
+        50
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 0,
+      "height": 42,
+      "angles": 128,
+      "rs": [
+        112,
+        48,
+        114,
+        50
+      ]
+    }
+  },
+  {
+    "id_hex": "0x80808080",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 8,
+      "count": 0,
+      "height": 128,
+      "angles": 128,
+      "micro": 128,
+      "rs": [
+        112,
+        48,
+        114,
+        50
+      ]
+    },
+    "extracted": {
+      "macro": 8,
+      "count": 0,
+      "height": 0,
+      "angles": 128,
+      "rs": [
+        112,
+        0,
+        114,
+        2
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9A5713D7",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 10,
+      "height": 87,
+      "angles": 19,
+      "micro": 215,
+      "rs": [
+        194,
+        250,
+        160,
+        145
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 10,
+      "height": 0,
+      "angles": 19,
+      "rs": [
+        194,
+        250,
+        160,
+        145
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9A5713D7",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 10,
+      "height": 87,
+      "angles": 19,
+      "micro": 215,
+      "rs": [
+        194,
+        250,
+        160,
+        145
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 10,
+      "height": 0,
+      "angles": 19,
+      "rs": [
+        194,
+        250,
+        160,
+        145
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9A5713D7",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 10,
+      "height": 87,
+      "angles": 19,
+      "micro": 215,
+      "rs": [
+        194,
+        250,
+        160,
+        145
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 6,
+      "height": 0,
+      "angles": 128,
+      "rs": [
+        192,
+        240,
+        160,
+        145
+      ]
+    }
+  },
+  {
+    "id_hex": "0x99887766",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 9,
+      "height": 136,
+      "angles": 119,
+      "micro": 102,
+      "rs": [
+        34,
+        190,
+        140,
+        16
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 9,
+      "height": 47,
+      "angles": 119,
+      "rs": [
+        34,
+        190,
+        140,
+        16
+      ]
+    }
+  },
+  {
+    "id_hex": "0x99887766",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 9,
+      "height": 136,
+      "angles": 119,
+      "micro": 102,
+      "rs": [
+        34,
+        190,
+        140,
+        16
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 9,
+      "height": 48,
+      "angles": 119,
+      "rs": [
+        34,
+        190,
+        140,
+        16
+      ]
+    }
+  },
+  {
+    "id_hex": "0x99887766",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 9,
+      "height": 136,
+      "angles": 119,
+      "micro": 102,
+      "rs": [
+        34,
+        190,
+        140,
+        16
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 9,
+      "height": 0,
+      "angles": 119,
+      "rs": [
+        32,
+        176,
+        128,
+        16
+      ]
+    }
+  },
+  {
+    "id_hex": "0xA1B2C3D4",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 1,
+      "height": 178,
+      "angles": 195,
+      "micro": 212,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 98,
+      "angles": 196,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    }
+  },
+  {
+    "id_hex": "0xA1B2C3D4",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 1,
+      "height": 178,
+      "angles": 195,
+      "micro": 212,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 94,
+      "angles": 195,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    }
+  },
+  {
+    "id_hex": "0xA1B2C3D4",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 1,
+      "height": 178,
+      "angles": 195,
+      "micro": 212,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 25,
+      "angles": 194,
+      "rs": [
+        67,
+        113,
+        143,
+        185
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAAAA0000",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 170,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 10,
+      "height": 52,
+      "angles": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAAAA0000",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 170,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 10,
+      "height": 53,
+      "angles": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAAAA0000",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 170,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 10,
+      "height": 0,
+      "angles": 0,
+      "rs": [
+        57,
+        109,
+        205,
+        153
+      ]
+    }
+  },
+  {
+    "id_hex": "0xB0C0D0E0",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 0,
+      "height": 192,
+      "angles": 208,
+      "micro": 224,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 0,
+      "height": 96,
+      "angles": 208,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    }
+  },
+  {
+    "id_hex": "0xB0C0D0E0",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 0,
+      "height": 192,
+      "angles": 208,
+      "micro": 224,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 0,
+      "height": 91,
+      "angles": 35,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    }
+  },
+  {
+    "id_hex": "0xB0C0D0E0",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 0,
+      "height": 192,
+      "angles": 208,
+      "micro": 224,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 0,
+      "height": 21,
+      "angles": 35,
+      "rs": [
+        20,
+        103,
+        77,
+        126
+      ]
+    }
+  },
+  {
+    "id_hex": "0xBEEFCAFE",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 14,
+      "height": 239,
+      "angles": 202,
+      "micro": 254,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 12,
+      "height": 89,
+      "angles": 21,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    }
+  },
+  {
+    "id_hex": "0xBEEFCAFE",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 14,
+      "height": 239,
+      "angles": 202,
+      "micro": 254,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 12,
+      "height": 87,
+      "angles": 21,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    }
+  },
+  {
+    "id_hex": "0xBEEFCAFE",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 11,
+      "count": 14,
+      "height": 239,
+      "angles": 202,
+      "micro": 254,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    },
+    "extracted": {
+      "macro": 11,
+      "count": 12,
+      "height": 14,
+      "angles": 21,
+      "rs": [
+        90,
+        218,
+        202,
+        47
+      ]
+    }
+  },
+  {
+    "id_hex": "0xC1C2C3C4",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 1,
+      "height": 194,
+      "angles": 195,
+      "micro": 196,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 2,
+      "height": 86,
+      "angles": 125,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    }
+  },
+  {
+    "id_hex": "0xC1C2C3C4",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 1,
+      "height": 194,
+      "angles": 195,
+      "micro": 196,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 1,
+      "height": 92,
+      "angles": 196,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    }
+  },
+  {
+    "id_hex": "0xC1C2C3C4",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 1,
+      "height": 194,
+      "angles": 195,
+      "micro": 196,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 1,
+      "height": 23,
+      "angles": 193,
+      "rs": [
+        61,
+        139,
+        249,
+        75
+      ]
+    }
+  },
+  {
+    "id_hex": "0xCAFEBABE",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 10,
+      "height": 254,
+      "angles": 186,
+      "micro": 190,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 10,
+      "height": 115,
+      "angles": 186,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    }
+  },
+  {
+    "id_hex": "0xCAFEBABE",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 10,
+      "height": 254,
+      "angles": 186,
+      "micro": 190,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 10,
+      "height": 114,
+      "angles": 186,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    }
+  },
+  {
+    "id_hex": "0xCAFEBABE",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 12,
+      "count": 10,
+      "height": 254,
+      "angles": 186,
+      "micro": 190,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    },
+    "extracted": {
+      "macro": 12,
+      "count": 10,
+      "height": 33,
+      "angles": 186,
+      "rs": [
+        189,
+        49,
+        124,
+        192
+      ]
+    }
+  },
+  {
+    "id_hex": "0xD1234567",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 1,
+      "height": 35,
+      "angles": 69,
+      "micro": 103,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 2,
+      "height": 0,
+      "angles": null,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    }
+  },
+  {
+    "id_hex": "0xD1234567",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 1,
+      "height": 35,
+      "angles": 69,
+      "micro": 103,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 2,
+      "height": 0,
+      "angles": null,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    }
+  },
+  {
+    "id_hex": "0xD1234567",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 1,
+      "height": 35,
+      "angles": 69,
+      "micro": 103,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 2,
+      "height": 0,
+      "angles": null,
+      "rs": [
+        7,
+        207,
+        119,
+        111
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEAD1234",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 18,
+      "micro": 52,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 14,
+      "height": 44,
+      "angles": 18,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEAD1234",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 18,
+      "micro": 52,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 14,
+      "height": 45,
+      "angles": 18,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEAD1234",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 18,
+      "micro": 52,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 14,
+      "height": 0,
+      "angles": 18,
+      "rs": [
+        171,
+        12,
+        71,
+        181
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE0E1E2E3",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 0,
+      "height": 225,
+      "angles": 226,
+      "micro": 227,
+      "rs": [
+        223,
+        215,
+        87,
+        95
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 1,
+      "height": 119,
+      "angles": 143,
+      "rs": [
+        223,
+        215,
+        87,
+        95
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE0E1E2E3",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 0,
+      "height": 225,
+      "angles": 226,
+      "micro": 227,
+      "rs": [
+        223,
+        215,
+        87,
+        95
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 0,
+      "height": 135,
+      "angles": 226,
+      "rs": [
+        223,
+        215,
+        87,
+        95
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE0E1E2E3",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 0,
+      "height": 225,
+      "angles": 226,
+      "micro": 227,
+      "rs": [
+        223,
+        215,
+        87,
+        95
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 0,
+      "height": 56,
+      "angles": 225,
+      "rs": [
+        209,
+        209,
+        81,
+        89
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE5678901",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 5,
+      "height": 103,
+      "angles": 137,
+      "micro": 1,
+      "rs": [
+        102,
+        40,
+        243,
+        183
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 5,
+      "height": 28,
+      "angles": 137,
+      "rs": [
+        102,
+        40,
+        243,
+        183
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE5678901",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 5,
+      "height": 103,
+      "angles": 137,
+      "micro": 1,
+      "rs": [
+        102,
+        40,
+        243,
+        183
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 5,
+      "height": 27,
+      "angles": 40,
+      "rs": [
+        102,
+        40,
+        243,
+        183
+      ]
+    }
+  },
+  {
+    "id_hex": "0xE5678901",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 14,
+      "count": 5,
+      "height": 103,
+      "angles": 137,
+      "micro": 1,
+      "rs": [
+        102,
+        40,
+        243,
+        183
+      ]
+    },
+    "extracted": {
+      "macro": 14,
+      "count": 5,
+      "height": 0,
+      "angles": 229,
+      "rs": [
+        96,
+        32,
+        241,
+        177
+      ]
+    }
+  },
+  {
+    "id_hex": "0xF0F1F2F3",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 0,
+      "height": 241,
+      "angles": 242,
+      "micro": 243,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 0,
+      "height": 143,
+      "angles": 242,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0xF0F1F2F3",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 0,
+      "height": 241,
+      "angles": 242,
+      "micro": 243,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 0,
+      "height": 137,
+      "angles": 242,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0xF0F1F2F3",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 0,
+      "height": 241,
+      "angles": 242,
+      "micro": 243,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 0,
+      "height": 54,
+      "angles": 242,
+      "rs": [
+        209,
+        209,
+        30,
+        30
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFACEB00C",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 10,
+      "height": 206,
+      "angles": 176,
+      "micro": 12,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 78,
+      "angles": 176,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFACEB00C",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 10,
+      "height": 206,
+      "angles": 176,
+      "micro": 12,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 79,
+      "angles": 176,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFACEB00C",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 10,
+      "height": 206,
+      "angles": 176,
+      "micro": 12,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 9,
+      "angles": 176,
+      "rs": [
+        25,
+        82,
+        24,
+        219
+      ]
+    }
+  },
+  {
+    "id_hex": "0x18BE5C09",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 8,
+      "height": 190,
+      "angles": 92,
+      "micro": 9,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 7,
+      "height": 78,
+      "angles": 153,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    }
+  },
+  {
+    "id_hex": "0x18BE5C09",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 8,
+      "height": 190,
+      "angles": 92,
+      "micro": 9,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 8,
+      "height": 76,
+      "angles": 92,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    }
+  },
+  {
+    "id_hex": "0x18BE5C09",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 8,
+      "height": 190,
+      "angles": 92,
+      "micro": 9,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 8,
+      "height": 6,
+      "angles": 92,
+      "rs": [
+        57,
+        4,
+        167,
+        105
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9B73C5A1",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 11,
+      "height": 115,
+      "angles": 197,
+      "micro": 161,
+      "rs": [
+        103,
+        172,
+        249,
+        190
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 11,
+      "height": 19,
+      "angles": 197,
+      "rs": [
+        103,
+        172,
+        249,
+        190
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9B73C5A1",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 11,
+      "height": 115,
+      "angles": 197,
+      "micro": 161,
+      "rs": [
+        103,
+        172,
+        249,
+        190
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 11,
+      "height": 20,
+      "angles": 197,
+      "rs": [
+        103,
+        172,
+        249,
+        190
+      ]
+    }
+  },
+  {
+    "id_hex": "0x9B73C5A1",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 9,
+      "count": 11,
+      "height": 115,
+      "angles": 197,
+      "micro": 161,
+      "rs": [
+        103,
+        172,
+        249,
+        190
+      ]
+    },
+    "extracted": {
+      "macro": 9,
+      "count": 9,
+      "height": 0,
+      "angles": 185,
+      "rs": [
+        97,
+        160,
+        241,
+        176
+      ]
+    }
+  },
+  {
+    "id_hex": "0x44556677",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 4,
+      "height": 85,
+      "angles": 102,
+      "micro": 119,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 15,
+      "angles": 102,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    }
+  },
+  {
+    "id_hex": "0x44556677",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 4,
+      "height": 85,
+      "angles": 102,
+      "micro": 119,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 13,
+      "angles": 102,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    }
+  },
+  {
+    "id_hex": "0x44556677",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 4,
+      "count": 4,
+      "height": 85,
+      "angles": 102,
+      "micro": 119,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 0,
+      "angles": 103,
+      "rs": [
+        102,
+        239,
+        234,
+        99
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAABBCCDD",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 187,
+      "angles": 204,
+      "micro": 221,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 9,
+      "height": 60,
+      "angles": 250,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAABBCCDD",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 187,
+      "angles": 204,
+      "micro": 221,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 8,
+      "height": 61,
+      "angles": 117,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    }
+  },
+  {
+    "id_hex": "0xAABBCCDD",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 10,
+      "count": 10,
+      "height": 187,
+      "angles": 204,
+      "micro": 221,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    },
+    "extracted": {
+      "macro": 10,
+      "count": 8,
+      "height": 0,
+      "angles": 117,
+      "rs": [
+        223,
+        114,
+        47,
+        130
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12121212",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 18,
+      "angles": 18,
+      "micro": 18,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 18,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12121212",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 18,
+      "angles": 18,
+      "micro": 18,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 19,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    }
+  },
+  {
+    "id_hex": "0x12121212",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 2,
+      "height": 18,
+      "angles": 18,
+      "micro": 18,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 2,
+      "height": 0,
+      "angles": 19,
+      "rs": [
+        198,
+        207,
+        237,
+        228
+      ]
+    }
+  },
+  {
+    "id_hex": "0x34343434",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 4,
+      "height": 52,
+      "angles": 52,
+      "micro": 52,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 0,
+      "angles": 52,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    }
+  },
+  {
+    "id_hex": "0x34343434",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 4,
+      "height": 52,
+      "angles": 52,
+      "micro": 52,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 0,
+      "angles": 52,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    }
+  },
+  {
+    "id_hex": "0x34343434",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 3,
+      "count": 4,
+      "height": 52,
+      "angles": 52,
+      "micro": 52,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 4,
+      "height": 0,
+      "angles": 51,
+      "rs": [
+        159,
+        133,
+        142,
+        148
+      ]
+    }
+  },
+  {
+    "id_hex": "0x56565656",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 6,
+      "height": 86,
+      "angles": 86,
+      "micro": 86,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 6,
+      "height": 10,
+      "angles": 87,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    }
+  },
+  {
+    "id_hex": "0x56565656",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 6,
+      "height": 86,
+      "angles": 86,
+      "micro": 86,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 6,
+      "height": 9,
+      "angles": 86,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    }
+  },
+  {
+    "id_hex": "0x56565656",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 5,
+      "count": 6,
+      "height": 86,
+      "angles": 86,
+      "micro": 86,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    },
+    "extracted": {
+      "macro": 5,
+      "count": 6,
+      "height": 0,
+      "angles": 86,
+      "rs": [
+        115,
+        88,
+        129,
+        170
+      ]
+    }
+  },
+  {
+    "id_hex": "0x78787878",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 8,
+      "height": 120,
+      "angles": 120,
+      "micro": 120,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 8,
+      "height": 25,
+      "angles": 121,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    }
+  },
+  {
+    "id_hex": "0x78787878",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 8,
+      "height": 120,
+      "angles": 120,
+      "micro": 120,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 8,
+      "height": 25,
+      "angles": 120,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    }
+  },
+  {
+    "id_hex": "0x78787878",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 7,
+      "count": 8,
+      "height": 120,
+      "angles": 120,
+      "micro": 120,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    },
+    "extracted": {
+      "macro": 7,
+      "count": 8,
+      "height": 0,
+      "angles": 120,
+      "rs": [
+        45,
+        17,
+        72,
+        116
+      ]
+    }
+  },
+  {
+    "id_hex": "0x00000001",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 0,
+      "micro": 1,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    },
+    "extracted": {
+      "macro": 0,
+      "count": 2,
+      "height": 0,
+      "angles": 111,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    }
+  },
+  {
+    "id_hex": "0x00000001",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 0,
+      "micro": 1,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 2,
+      "height": 0,
+      "angles": 111,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    }
+  },
+  {
+    "id_hex": "0x00000001",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 0,
+      "micro": 1,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": null,
+      "height": null,
+      "angles": null,
+      "rs": [
+        15,
+        54,
+        120,
+        64
+      ]
+    }
+  },
+  {
+    "id_hex": "0x0000FFFF",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": 1,
+      "height": 0,
+      "angles": null,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    }
+  },
+  {
+    "id_hex": "0x0000FFFF",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": null,
+      "height": null,
+      "angles": null,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    }
+  },
+  {
+    "id_hex": "0x0000FFFF",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 0,
+      "count": 0,
+      "height": 0,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    },
+    "extracted": {
+      "macro": null,
+      "count": null,
+      "height": null,
+      "angles": null,
+      "rs": [
+        215,
+        88,
+        188,
+        51
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFF0000",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 15,
+      "height": 93,
+      "angles": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFF0000",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 15,
+      "height": 94,
+      "angles": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFF0000",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 0,
+      "micro": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 15,
+      "height": 20,
+      "angles": 0,
+      "rs": [
+        171,
+        213,
+        37,
+        91
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFFFFFF",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 110,
+      "angles": 210,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFFFFFF",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 109,
+      "angles": 209,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    }
+  },
+  {
+    "id_hex": "0xFFFFFFFF",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 15,
+      "count": 15,
+      "height": 255,
+      "angles": 255,
+      "micro": 255,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    },
+    "extracted": {
+      "macro": 15,
+      "count": 10,
+      "height": 28,
+      "angles": 209,
+      "rs": [
+        124,
+        141,
+        153,
+        104
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEADBEEF",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 190,
+      "micro": 239,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 10,
+      "height": 47,
+      "angles": 227,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEADBEEF",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 190,
+      "micro": 239,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 10,
+      "height": 47,
+      "angles": 227,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    }
+  },
+  {
+    "id_hex": "0xDEADBEEF",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 13,
+      "count": 14,
+      "height": 173,
+      "angles": 190,
+      "micro": 239,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    },
+    "extracted": {
+      "macro": 13,
+      "count": 10,
+      "height": 0,
+      "angles": 145,
+      "rs": [
+        131,
+        134,
+        201,
+        238
+      ]
+    }
+  },
+  {
+    "id_hex": "0x13572468",
+    "wear": 0,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 3,
+      "height": 87,
+      "angles": 36,
+      "micro": 104,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 3,
+      "height": 10,
+      "angles": 37,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    }
+  },
+  {
+    "id_hex": "0x13572468",
+    "wear": 0.2,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 3,
+      "height": 87,
+      "angles": 36,
+      "micro": 104,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 3,
+      "height": 6,
+      "angles": 36,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    }
+  },
+  {
+    "id_hex": "0x13572468",
+    "wear": 0.4,
+    "channels_encoded": {
+      "macro": 1,
+      "count": 3,
+      "height": 87,
+      "angles": 36,
+      "micro": 104,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    },
+    "extracted": {
+      "macro": 1,
+      "count": 3,
+      "height": 0,
+      "angles": 36,
+      "rs": [
+        100,
+        72,
+        19,
+        55
+      ]
+    }
+  }
+]

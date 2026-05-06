@@ -1,0 +1,13 @@
+// Add these lines to the dependencies block in android/app/build.gradle
+// after running `flutter create` to generate the Android project:
+//
+// android {
+//     aaptOptions {
+//         noCompress "tflite"   // keep TFLite model uncompressed for mmap
+//     }
+// }
+//
+// dependencies {
+//     implementation 'org.tensorflow:tensorflow-lite:2.14.0'
+//     implementation 'org.tensorflow:tensorflow-lite-support:0.4.4'
+// }
