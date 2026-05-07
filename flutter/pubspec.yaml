@@ -42,7 +42,7 @@ flutter:
   assets:
     - assets/models/macro_cnn.onnx          # macro CNN
     - assets/models/midas_small.onnx        # MiDaS monocular depth (web + non-LiDAR)
-    #   - assets/models/tile_detector.onnx    # YOLOv8-nano-seg (add after: python scripts/export_yolo_onnx.py)
+    - assets/models/tile_detector.onnx      # YOLOv8-nano-seg tile detector
     #   - assets/models/macro_cnn.mlpackage  # CoreML iOS  — export on macOS
     #   - assets/models/macro_cnn.tflite     # TFLite INT8 Android — export on macOS/Linux
     #   - assets/models/tile_detector.tflite   # YOLOv8-seg — Stage 1 (not yet trained)
