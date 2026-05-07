@@ -1,0 +1,4847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second-Life Couture — Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root {
+    --paper: #f4ede0;
+    --paper-dark: #ebe2d0;
+    --paper-deeper: #ddd1b8;
+    --ink: #15110b;
+    --ink-soft: #4a4034;
+    --ink-faint: #8a7d68;
+    --rule: #c4b89e;
+    --accent: #b8472b;
+    --accent-dim: #8a3621;
+    --good: #2d5a3d;
+    --warn: #7a5811;
+    --bad: #8a3621;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(0,0,0,0.015) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,0.015) 1px, transparent 1px);
+    background-size: 3px 3px, 5px 5px;
+    mix-blend-mode: multiply;
+  }
+
+  .frame {
+    position: relative;
+    z-index: 2;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 36px 48px 80px;
+  }
+
+  /* ========== MASTHEAD ========== */
+  .masthead {
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 24px;
+  }
+  .masthead-l, .masthead-r {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+  }
+  .masthead-r { text-align: right; }
+  .masthead-c { text-align: center; }
+  .masthead h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 44px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .masthead h1 .amp { color: var(--accent); font-weight: 400; }
+  .masthead .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* ========== TAB NAVIGATION ========== */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 0.5px solid var(--rule);
+    margin-bottom: 36px;
+  }
+  .tab {
+    background: none;
+    border: none;
+    padding: 14px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    cursor: pointer;
+    border-bottom: 1.5px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+  .tab:hover { color: var(--ink-soft); }
+  .tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .tab-num {
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .tab.active .tab-num { color: var(--accent); }
+
+  /* ========== PANEL SHARED ========== */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-intro {
+    margin-bottom: 28px;
+    max-width: 640px;
+  }
+  .panel-intro h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .panel-intro p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ========== TWO-COLUMN STAGE (used by all panels) ========== */
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .col-input { padding-right: 8px; }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .id-input-wrap {
+    position: relative;
+    border-bottom: 1.5px solid var(--ink);
+    padding: 4px 0;
+    margin-bottom: 24px;
+  }
+  .id-input-wrap input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+  .id-input-wrap::after {
+    content: '32-bit';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 13px 18px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn-accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper);
+  }
+  .btn-accent:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+
+  /* Channel readout */
+  .channels { margin-bottom: 24px; }
+  .channels h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .ch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .ch { background: var(--paper); padding: 10px 14px; }
+  .ch-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .ch-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ch-val .unit {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    margin-left: 4px;
+  }
+  .ch.full { grid-column: 1 / -1; }
+
+  .ch-tier {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 7.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border: 0.5px solid currentColor;
+    vertical-align: middle;
+  }
+  .tier-high { color: var(--good); }
+  .tier-med  { color: var(--warn); }
+  .tier-low  { color: var(--accent-dim); }
+
+  /* ========== PREVIEW FRAME ========== */
+  .preview-frame {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
+    border: 1px solid var(--ink);
+    overflow: hidden;
+  }
+  .preview-frame::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 0.5px solid var(--rule);
+    pointer-events: none;
+    z-index: 5;
+  }
+  .corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    z-index: 6; pointer-events: none;
+  }
+  .corner.tl { top: 6px; left: 6px;  border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+  .corner.tr { top: 6px; right: 6px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+  .corner.bl { bottom: 6px; left: 6px;  border-bottom: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+  .corner.br { bottom: 6px; right: 6px; border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+
+  .preview-canvas {
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  .preview-meta {
+    position: absolute;
+    bottom: 22px; left: 22px;
+    z-index: 7;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .preview-meta strong { color: var(--ink); font-weight: 600; }
+  .preview-meta .accent { color: var(--accent); }
+
+  .scale-bar {
+    position: absolute;
+    top: 22px; right: 22px;
+    z-index: 7;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .scale-bar .bar {
+    width: 60px; height: 1px;
+    background: var(--ink);
+    margin: 6px 0 6px auto;
+    position: relative;
+  }
+  .scale-bar .bar::before, .scale-bar .bar::after {
+    content: '';
+    position: absolute;
+    width: 1px; height: 5px;
+    background: var(--ink);
+    top: -2px;
+  }
+  .scale-bar .bar::before { left: 0; }
+  .scale-bar .bar::after  { right: 0; }
+
+  /* ========== WEAR CONTROL ========== */
+  .wear-control {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border: 1px solid var(--rule);
+    background: rgba(255,255,255,0.4);
+  }
+  .wear-control .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .wear-control .label-inline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+  }
+  .wear-control .pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, var(--ink) 0%, var(--accent) 50%, var(--accent-dim) 100%);
+    height: 2px;
+  }
+  input[type=range]::-moz-range-track {
+    background: linear-gradient(to right, var(--ink) 0%, var(--accent) 50%, var(--accent-dim) 100%);
+    height: 2px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px; height: 13px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    margin-top: -6px;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 13px; height: 13px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+  }
+  .wear-stages {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ========== DRAW PANEL ========== */
+  .draw-canvas-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    overflow: hidden;
+    cursor: crosshair;
+  }
+  #draw-canvas {
+    width: 100%; height: 100%;
+    display: block;
+    touch-action: none;
+  }
+  .draw-help {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    pointer-events: none;
+    background: rgba(244, 237, 224, 0.85);
+    padding: 4px 8px;
+  }
+  .draw-tools {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .stroke-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 0.5px solid var(--rule);
+    flex: 1;
+  }
+  .stroke-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .stroke-control input { flex: 1; }
+
+  /* ========== PHOTO PANEL ========== */
+  .photo-drop {
+    aspect-ratio: 1 / 1;
+    border: 1.5px dashed var(--rule);
+    background: var(--paper-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+    padding: 24px;
+  }
+  .photo-drop:hover, .photo-drop.dragover {
+    border-color: var(--accent);
+    background: rgba(184, 71, 43, 0.04);
+  }
+  .photo-drop.has-image {
+    cursor: default;
+    border-style: solid;
+    border-color: var(--ink);
+    padding: 0;
+  }
+  .photo-drop img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .photo-drop-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--ink-soft);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+  .photo-drop-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .photo-drop-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .photo-controls {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .photo-control {
+    padding: 10px 14px;
+    border: 0.5px solid var(--rule);
+  }
+  .photo-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ========== SCAN PANEL ========== */
+  .scan-stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  .scan-source {
+    border: 1.5px solid var(--ink);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .scan-source canvas {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  .scan-source-empty {
+    position: absolute; inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 24px;
+  }
+  .scan-source-empty p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .scan-source-empty .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* Reticle overlay during scan */
+  .reticle {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .reticle.scanning .scanline {
+    animation: scan 1.6s ease-in-out infinite;
+  }
+  @keyframes scan {
+    0%   { transform: translateY(0); opacity: 0.4; }
+    50%  { transform: translateY(100%); opacity: 1; }
+    100% { transform: translateY(0); opacity: 0.4; }
+  }
+  .scanline {
+    position: absolute;
+    left: 6%; right: 6%;
+    top: 6%;
+    height: 1.5px;
+    background: linear-gradient(to right,
+      transparent 0%, var(--accent) 30%, var(--accent) 70%, transparent 100%);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* Scan results */
+  .scan-result {
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    padding: 24px;
+    min-height: 360px;
+  }
+
+  .result-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .result-empty p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .result-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 0.8px solid currentColor;
+    margin-bottom: 18px;
+  }
+  .result-confidence .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .result-confidence span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .result-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  .result-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .result-meta .sep { color: var(--rule); margin: 0 8px; }
+  .result-meta .neutral { color: var(--ink-soft); }
+
+  .result-provenance {
+    margin: 22px 0;
+    padding: 16px;
+    background: rgba(196, 184, 158, 0.18);
+    border: 0.5px solid var(--rule);
+  }
+  .result-provenance .row {
+    display: flex;
+    padding: 4px 0;
+  }
+  .result-provenance .row .lbl {
+    width: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 3px;
+  }
+  .result-provenance .row .val {
+    flex: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  .result-channels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 16px;
+  }
+  .rch {
+    background: var(--paper);
+    padding: 8px 10px;
+  }
+  .rch-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+  .rch-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .rch.match { color: var(--good); }
+  .rch.lost  { color: var(--bad); }
+
+  /* ========== MOTIF GRID ========== */
+  .motif-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .motif-card {
+    cursor: pointer;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    transition: all 0.18s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .motif-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(21, 17, 11, 0.07);
+  }
+  .motif-card.selected {
+    border-color: var(--accent);
+    border-width: 1.5px;
+    box-shadow: 0 0 0 2px rgba(184, 71, 43, 0.08);
+  }
+  .motif-card .motif-svg-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    position: relative;
+  }
+  .motif-card .motif-svg-wrap::before {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--paper-dark) 0%, var(--paper) 70%);
+    z-index: 0;
+  }
+  .motif-card svg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  .motif-card .motif-name {
+    padding: 10px 14px;
+    border-top: 0.5px solid var(--rule);
+    background: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .motif-card .motif-name h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .motif-card .motif-name .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .motif-card.selected .motif-name .tag {
+    color: var(--accent);
+  }
+
+  .motif-selected-card {
+    background: var(--paper-dark);
+    padding: 18px 22px;
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .motif-selected-card .motif-mini {
+    width: 56px; height: 56px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--rule);
+    padding: 8px;
+  }
+  .motif-selected-card .motif-mini svg { width: 100%; height: 100%; }
+  .motif-selected-card .motif-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .motif-selected-card .motif-info p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .motif-overlay-svg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .motif-overlay-svg svg {
+    width: 70%; height: 70%;
+    opacity: 0.0; /* SVG overlay is for export reference; 3D renders the engraving */
+  }
+
+  .id-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    border-bottom: 1.5px solid var(--ink);
+    padding: 4px 0 8px;
+    margin-bottom: 18px;
+  }
+
+  /* ========== GARMENT MOCKUPS ========== */
+  .garment-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .garment-stage {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  .garment-mockup {
+    aspect-ratio: 4 / 5;
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .garment-mockup svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .garment-detail-frame {
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
+    border: 1px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .garment-detail-frame canvas {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  .garment-spec {
+    background: rgba(196, 184, 158, 0.18);
+    border: 0.5px solid var(--rule);
+    padding: 14px 16px;
+  }
+  .garment-spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    gap: 12px;
+  }
+  .garment-spec-row + .garment-spec-row {
+    border-top: 0.5px solid var(--rule);
+  }
+  .garment-spec-row .label {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .garment-spec-row strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--ink);
+    text-align: right;
+    line-height: 1.3;
+  }
+
+  /* ========== PALETTE PICKER ========== */
+  .palette-section {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 0.5px solid var(--rule);
+  }
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .palette-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .palette-card:hover {
+    border-color: var(--ink-soft);
+    transform: translateY(-1px);
+  }
+  .palette-card.selected {
+    border-color: var(--accent);
+    border-width: 1.5px;
+    box-shadow: 0 0 0 1.5px rgba(184, 71, 43, 0.06);
+  }
+  .palette-swatches {
+    display: flex;
+    gap: 0;
+    height: 22px;
+    margin-bottom: 6px;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 0.5px solid rgba(0, 0, 0, 0.08);
+  }
+  .palette-swatches span {
+    flex: 1;
+    height: 100%;
+  }
+  .palette-card h5 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0;
+  }
+  .palette-card.selected h5 { color: var(--accent); }
+  .palette-card p {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+
+  /* ========== COMPOSE ========== */
+  .artwork-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .compose-stage {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  .compose-canvas-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    overflow: hidden;
+  }
+  .compose-canvas-wrap svg {
+    width: 100%; height: 100%;
+    display: block;
+    user-select: none;
+  }
+  .compose-help {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    pointer-events: none;
+    background: rgba(244, 237, 224, 0.85);
+    padding: 4px 8px;
+  }
+  .compose-tile {
+    cursor: grab;
+  }
+  .compose-tile:active { cursor: grabbing; }
+  .compose-tile-summary {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    background: rgba(196, 184, 158, 0.18);
+    border: 0.5px solid var(--rule);
+  }
+  .compose-tile-preview {
+    width: 60px; height: 60px;
+    flex-shrink: 0;
+  }
+  .compose-tile-preview svg { width: 100%; height: 100%; }
+  .compose-tile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .compose-tile-info strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .compose-tile-info span {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* ========== ORDER WORKFLOW ========== */
+  .order-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 28px 0 36px;
+  }
+  .order-step {
+    background: var(--paper-dark);
+    border: 0.5px solid var(--rule);
+    padding: 22px 20px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .order-step.current {
+    background: var(--paper);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(184, 71, 43, 0.06);
+  }
+  .order-step.done {
+    opacity: 0.55;
+  }
+  .order-step .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .order-step.done .num { color: var(--good); }
+  .order-step h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .order-step p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+  .order-step .meta {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .order-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .order-summary {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 32px;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+  }
+  .order-summary h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .order-summary p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(244, 237, 224, 0.75);
+  }
+  .order-summary .figures {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .order-summary .fig {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.5px solid rgba(244, 237, 224, 0.15);
+    padding-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .order-summary .fig strong {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .order-summary .fig .v {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ========== 3D PRINT SPECIFICATION CARD ========== */
+  .print-spec {
+    margin-top: 28px;
+    background: var(--paper);
+    border: 0.5px solid var(--rule);
+    padding: 24px 28px;
+  }
+  .print-spec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 0.5px solid var(--rule);
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+  }
+  .print-spec-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .print-spec-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .print-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+  }
+  .print-spec-block .ps-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-bottom: 6px;
+    border-bottom: 0.5px solid var(--rule);
+    margin-bottom: 8px;
+  }
+  .print-spec-block .ps-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .print-spec-block .ps-row span {
+    color: var(--ink-soft);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .print-spec-block .ps-row strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+  }
+  .print-spec-footer {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 0.5px solid var(--rule);
+    max-width: 680px;
+  }
+
+  /* ========== STATUS / TOAST ========== */
+  .status-line {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    z-index: 100;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    border-left: 3px solid var(--accent);
+  }
+  .status-line.show { transform: translateX(-50%) translateY(0); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    .frame { padding: 24px 18px 60px; }
+    .stage, .scan-stage, .garment-stage { grid-template-columns: 1fr; gap: 28px; }
+    .order-flow { grid-template-columns: 1fr 1fr; }
+    .order-summary { grid-template-columns: 1fr; }
+    .masthead { grid-template-columns: 1fr; gap: 12px; text-align: center; }
+    .masthead-r { text-align: center; }
+    .masthead h1 { font-size: 30px; }
+    .tabs { overflow-x: auto; flex-wrap: nowrap; }
+    .tab { white-space: nowrap; padding: 12px 14px; }
+  }
+  @media (max-width: 560px) {
+    .order-flow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-l">Second-Life Couture<br>Atelier No. 03 / Lviv</div>
+    <div class="masthead-c">
+      <h1>Pattern <span class="amp">&amp;</span> Provenance</h1>
+      <div class="sub">A 3D Codec for Garments That Outlive the Tag</div>
+    </div>
+    <div class="masthead-r">Spring · MMXXVI<br>Vol. I · TZ 3.0</div>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="motif"><span class="tab-num">01</span>Motif</button>
+    <button class="tab" data-tab="parametric"><span class="tab-num">02</span>Parametric</button>
+    <button class="tab" data-tab="draw"><span class="tab-num">03</span>Draw</button>
+    <button class="tab" data-tab="photo"><span class="tab-num">04</span>From Photo</button>
+    <button class="tab" data-tab="compose"><span class="tab-num">05</span>Compose</button>
+    <button class="tab" data-tab="scan"><span class="tab-num">06</span>Scan</button>
+    <button class="tab" data-tab="garment"><span class="tab-num">07</span>On Garment</button>
+    <button class="tab" data-tab="order"><span class="tab-num">08</span>Order</button>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 01 — MOTIF (curated decorative patterns) -->
+  <!-- ============================================================== -->
+  <section class="panel active" id="panel-motif">
+    <div class="panel-intro">
+      <h2>Choose a motif</h2>
+      <p>Each motif is a beautiful, ancient symbol — a rose, an eye, a coiled snake — engraved into your tile alongside the codec's machine-readable signature. The atelier issues an identifier under the motif you choose; what you see is the symbol, what the camera reads is the proof.</p>
+    </div>
+
+    <div class="motif-grid" id="motif-grid"></div>
+
+    <div class="stage" id="motif-stage" style="display: none; margin-top: 32px;">
+      <div class="col-input">
+        <span class="label">Selected motif</span>
+        <div id="motif-selected-card" class="motif-selected-card"></div>
+
+        <div class="actions" style="margin-top: 18px;">
+          <button class="btn btn-primary" id="btn-motif-mint">↻ Mint new ID</button>
+          <button class="btn" id="btn-motif-stl">Download STL</button>
+          <button class="btn" id="btn-motif-on-garment">See on garment →</button>
+        </div>
+
+        <span class="label">Identifier</span>
+        <div class="id-display" id="motif-id-display">—</div>
+
+        <div class="channels" style="margin-top: 22px;">
+          <h3>What's hidden inside</h3>
+          <div class="ch-grid" id="motif-channels-grid"></div>
+        </div>
+
+        <div class="palette-section">
+          <span class="label">Palette &amp; finish</span>
+          <div class="palette-grid" id="palette-grid"></div>
+        </div>
+      </div>
+
+      <div class="col-preview">
+        <div class="preview-frame">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <canvas id="canvas-3d-motif" class="preview-canvas"></canvas>
+          <div class="motif-overlay-svg" id="motif-overlay-svg"></div>
+          <div class="scale-bar"><div>30 mm dia.</div><div class="bar"></div><div>~0.9g Elastico™</div></div>
+          <div class="preview-meta">
+            <strong id="motif-meta-id">—</strong> · <span id="motif-meta-name" class="accent">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 02 — PARAMETRIC -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-parametric">
+    <div class="panel-intro">
+      <h2>Parametric encoder</h2>
+      <p>Type a 32-bit identifier. The atelier turns it into five geometric channels — silhouette, count, height, angles, micro-texture — plus Reed-Solomon parity, and renders the printable tile.</p>
+    </div>
+
+    <div class="stage">
+      <div class="col-input">
+        <span class="label">Item Identifier</span>
+        <div class="id-input-wrap">
+          <input id="id-input" type="text" value="0x2DCA3791" spellcheck="false" autocomplete="off">
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-encode">Encode</button>
+          <button class="btn" id="btn-random">↻ Random</button>
+          <button class="btn" id="btn-stl">Download STL</button>
+        </div>
+
+        <div class="channels">
+          <h3>Encoded channels</h3>
+          <div class="ch-grid">
+            <div class="ch"><div class="ch-name">Macro <span class="ch-tier tier-high">High</span></div><div class="ch-val" id="ch-macro">—</div></div>
+            <div class="ch"><div class="ch-name">Count <span class="ch-tier tier-high">High</span></div><div class="ch-val" id="ch-count">—</div></div>
+            <div class="ch"><div class="ch-name">Height <span class="ch-tier tier-med">Med</span></div><div class="ch-val" id="ch-height">—</div></div>
+            <div class="ch"><div class="ch-name">Angles <span class="ch-tier tier-med">Med</span></div><div class="ch-val" id="ch-angles">—</div></div>
+            <div class="ch"><div class="ch-name">Micro <span class="ch-tier tier-low">Low</span></div><div class="ch-val" id="ch-micro">—</div></div>
+            <div class="ch"><div class="ch-name">Reed-Solomon</div><div class="ch-val" id="ch-rs" style="font-size:13px;">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-preview">
+        <div class="preview-frame">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <canvas id="canvas-3d-parametric" class="preview-canvas"></canvas>
+          <div class="scale-bar"><div>30 mm dia.</div><div class="bar"></div><div>~0.9g Elastico™</div></div>
+          <div class="preview-meta">
+            <strong id="meta-id">—</strong> · <span id="meta-family" class="accent">—</span> · <span id="meta-protrusions">—</span>
+          </div>
+        </div>
+
+        <div class="wear-control">
+          <div class="row">
+            <span class="label-inline">Time-lapse</span>
+            <span class="pct" id="wear-pct">brand new</span>
+          </div>
+          <input type="range" id="wear-slider" min="0" max="100" value="0">
+          <div class="wear-stages">
+            <span>new</span><span>worn</span><span>vintage</span><span>archive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 02 — DRAW -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-draw">
+    <div class="panel-intro">
+      <h2>Hand-drawn motif</h2>
+      <p>Sketch a shape — a leaf, a sigil, a crest. The atelier embeds your 32-bit key into the drawing as subtle micro-modulations in stroke height, invisible to the eye but readable by the codec.</p>
+    </div>
+
+    <div class="stage">
+      <div class="col-input">
+        <span class="label">Item Identifier</span>
+        <div class="id-input-wrap">
+          <input id="draw-id-input" type="text" value="0x71F082A4" spellcheck="false">
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-draw-encode">Embed Key</button>
+          <button class="btn" id="btn-draw-clear">Clear</button>
+          <button class="btn" id="btn-draw-stl" disabled>Download STL</button>
+        </div>
+
+        <span class="label">How it works</span>
+        <p style="font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 18px;">
+          Your strokes become the <em>silhouette</em>. The codec adds 32 imperceptible relief markers around the boundary — one per parity bit — and modulates stroke height by the channel signature. The drawing is yours; the key is hidden in the relief.
+        </p>
+
+        <div id="draw-channels" class="channels" style="display:none;">
+          <h3>Embedded channels</h3>
+          <div class="ch-grid">
+            <div class="ch full"><div class="ch-name">Drawing complexity</div><div class="ch-val" id="dr-complexity">—</div></div>
+            <div class="ch"><div class="ch-name">Stroke modulation</div><div class="ch-val" id="dr-mod">—</div></div>
+            <div class="ch"><div class="ch-name">Boundary markers</div><div class="ch-val" id="dr-markers">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-preview">
+        <div class="draw-canvas-wrap">
+          <canvas id="draw-canvas" width="600" height="600"></canvas>
+          <div class="draw-help">Draw with mouse or finger</div>
+        </div>
+        <div class="draw-tools">
+          <div class="stroke-control">
+            <label>Stroke</label>
+            <input type="range" id="stroke-slider" min="6" max="30" value="14">
+          </div>
+        </div>
+        <div class="preview-frame" id="draw-3d-wrap" style="margin-top: 16px; display: none;">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <canvas id="canvas-3d-draw" class="preview-canvas"></canvas>
+          <div class="preview-meta"><strong>3D relief</strong> · <span class="accent">key embedded</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 03 — PHOTO -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-photo">
+    <div class="panel-intro">
+      <h2>Photo to relief</h2>
+      <p>Upload any photo — a flower, a face, a fragment of fabric. The atelier converts luminance to relief height, adds your key as a micro-pattern, and exports a printable tile. No AI service required; everything runs in your browser.</p>
+    </div>
+
+    <div class="stage">
+      <div class="col-input">
+        <span class="label">Item Identifier</span>
+        <div class="id-input-wrap">
+          <input id="photo-id-input" type="text" value="0x18BE5C09" spellcheck="false">
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-photo-encode" disabled>Convert</button>
+          <button class="btn" id="btn-photo-replace">Replace photo</button>
+          <button class="btn" id="btn-photo-stl" disabled>Download STL</button>
+        </div>
+
+        <div class="photo-controls">
+          <div class="photo-control">
+            <label>Relief depth</label>
+            <input type="range" id="depth-slider" min="20" max="100" value="60">
+          </div>
+          <div class="photo-control">
+            <label>Detail level</label>
+            <input type="range" id="detail-slider" min="0" max="100" value="50">
+          </div>
+        </div>
+
+        <p style="font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin-top: 18px;">
+          The image is converted to grayscale, brightness becomes elevation, and your 32-bit identifier is embedded as edge-modulation in the rim. Print, sew, scan.
+        </p>
+      </div>
+
+      <div class="col-preview">
+        <div class="photo-drop" id="photo-drop">
+          <div class="photo-drop-icon">↑</div>
+          <div class="photo-drop-text">Drop or choose a photo</div>
+          <div class="photo-drop-hint">JPG · PNG · 30 mm tile</div>
+          <input type="file" id="photo-input" accept="image/*" style="display:none;">
+        </div>
+        <div class="preview-frame" id="photo-3d-wrap" style="margin-top: 16px; display: none;">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <canvas id="canvas-3d-photo" class="preview-canvas"></canvas>
+          <div class="preview-meta"><strong>Relief preview</strong> · <span class="accent">photo + key</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 05 — COMPOSE (integrate tile into a larger artwork) -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-compose">
+    <div class="panel-intro">
+      <h2>Compose with the tile</h2>
+      <p>Treat the tile not as a label sewn on top, but as a piece of the design itself — a centrepiece in an embroidered bouquet, a focal point in an Art-Deco panel, the eye of a floral medallion. Choose an artwork, drag the tile into place, see how it reads.</p>
+    </div>
+
+    <div class="actions" style="margin-bottom: 22px;">
+      <button class="btn artwork-btn active" data-artwork="botanical">Botanical wreath</button>
+      <button class="btn artwork-btn" data-artwork="mandala">Mandala</button>
+      <button class="btn artwork-btn" data-artwork="deco">Art Deco panel</button>
+      <button class="btn artwork-btn" data-artwork="vine">Vine border</button>
+      <button class="btn artwork-btn" data-artwork="abstract">Abstract bloom</button>
+    </div>
+
+    <div class="compose-stage">
+      <div class="compose-canvas-wrap">
+        <svg id="compose-canvas" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="compose-help" id="compose-help">Drag the tile to reposition</div>
+      </div>
+      <div class="compose-info">
+        <span class="label">Composition</span>
+        <h3 id="compose-art-title" style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; margin-bottom: 4px;">Botanical wreath</h3>
+        <p style="font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 18px;" id="compose-art-blurb">A circular wreath of stems and small blossoms, the tile sitting at the centre as a medallion.</p>
+
+        <span class="label">Tile inside</span>
+        <div class="compose-tile-summary">
+          <div class="compose-tile-preview" id="compose-tile-preview"></div>
+          <div class="compose-tile-info">
+            <strong id="compose-tile-id">—</strong>
+            <span id="compose-tile-motif">—</span>
+            <span id="compose-tile-palette">—</span>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top: 22px;">
+          <button class="btn btn-primary" id="btn-compose-export">Export as SVG</button>
+          <button class="btn" id="btn-compose-scale">Tile size: medium</button>
+        </div>
+
+        <p style="font-size: 13px; color: var(--ink-faint); line-height: 1.5; margin-top: 18px; font-style: italic;">
+          The artwork around the tile is decorative — a possible embroidery or print pattern that surrounds the functional codec. Only the tile carries the codec; the surrounding lines are pure ornament.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 06 — SCAN -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-scan">
+    <div class="panel-intro">
+      <h2>Scan a pattern</h2>
+      <p>Point your camera at a printed tile — or, for the demo, scan the rendered preview from the Parametric tab. The codec extracts each channel from the relief, runs Reed-Solomon recovery, and surfaces the item's archive entry.</p>
+    </div>
+
+    <div class="actions" style="margin-bottom: 28px;">
+      <button class="btn btn-accent" id="btn-scan-current">Scan current preview</button>
+      <button class="btn" id="btn-scan-camera">Use camera</button>
+      <button class="btn" id="btn-scan-upload">Upload depth map</button>
+      <input type="file" id="scan-file" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="scan-stage">
+      <div>
+        <span class="label">Source</span>
+        <div class="scan-source">
+          <video id="scan-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:none;"></video>
+          <canvas id="scan-canvas" style="display:none;"></canvas>
+          <div class="scan-source-empty" id="scan-empty">
+            <p>No source captured yet</p>
+            <div class="hint">Press "Scan current preview" to begin</div>
+          </div>
+          <div class="reticle" id="scan-reticle" style="display:none;">
+            <div class="scanline"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="label">Result</span>
+        <div class="scan-result" id="scan-result">
+          <div class="result-empty">
+            <p>The atelier awaits a pattern.<br>Scan something to see its provenance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 06 — ON GARMENT (mockups) -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-garment">
+    <div class="panel-intro">
+      <h2>On the garment</h2>
+      <p>How the tile sits on the cloth. The relief catches light at oblique angles — subtle from across the room, unmistakable up close. Choose a garment, see your motif placed where the atelier would normally stitch it.</p>
+    </div>
+
+    <div class="actions" style="margin-bottom: 20px;">
+      <button class="btn garment-btn active" data-garment="coat">Linen overcoat</button>
+      <button class="btn garment-btn" data-garment="scarf">Silk scarf</button>
+      <button class="btn garment-btn" data-garment="dress">Wrap dress</button>
+      <button class="btn garment-btn" data-garment="jacket">Wool jacket</button>
+      <button class="btn garment-btn" data-garment="bag">Leather bag</button>
+    </div>
+
+    <div class="garment-stage">
+      <div class="garment-mockup" id="garment-mockup"></div>
+      <div class="garment-info">
+        <span class="label">Detail · raking light</span>
+        <div class="garment-detail-frame">
+          <canvas id="canvas-3d-garment" class="preview-canvas"></canvas>
+          <div class="motif-overlay-svg" id="garment-overlay-svg"></div>
+        </div>
+
+        <div class="garment-spec" id="garment-spec">
+          <div class="garment-spec-row"><span class="label">Identifier</span><strong id="garment-spec-id">—</strong></div>
+          <div class="garment-spec-row"><span class="label">Motif</span><strong id="garment-spec-motif">—</strong></div>
+          <div class="garment-spec-row"><span class="label">Placement</span><strong id="garment-spec-placement">—</strong></div>
+          <div class="garment-spec-row"><span class="label">Stitching</span><strong>4 corner anchors · waxed linen thread</strong></div>
+          <div class="garment-spec-row"><span class="label">Visibility</span><strong>3 mm proud of seam · catches raking light</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- PANEL 07 — ORDER -->
+  <!-- ============================================================== -->
+  <section class="panel" id="panel-order">
+    <div class="panel-intro">
+      <h2>Order workflow</h2>
+      <p>From a freshly minted item ID to a sewn-on, scannable tile — the path through the atelier, the print service, and your activation step. Click each stage to advance.</p>
+    </div>
+
+    <div class="order-flow">
+      <div class="order-step current" data-step="1">
+        <div class="num">01</div>
+        <h4>Mint identifier</h4>
+        <p>The atelier issues a 32-bit ID and bound metadata: maker, collection, garment, material.</p>
+        <div class="meta" id="order-step-1-meta">Ready · 0x2DCA3791</div>
+      </div>
+      <div class="order-step" data-step="2">
+        <div class="num">02</div>
+        <h4>Generate STL</h4>
+        <p>Channels encode into a 30 mm tile. Reed-Solomon parity printed as 32 rim markers. Single .stl file, ~600 KB.</p>
+        <div class="meta" id="order-step-2-meta">Awaiting</div>
+      </div>
+      <div class="order-step" data-step="3">
+        <div class="num">03</div>
+        <h4>Print &amp; receive</h4>
+        <p>Send .stl to atelier print service — printed in Elastico™ UV photopolymer via PolyJet. Tile arrives as a soft, flexible disc, ready to stitch.</p>
+        <div class="meta" id="order-step-3-meta">Awaiting</div>
+      </div>
+      <div class="order-step" data-step="4">
+        <div class="num">04</div>
+        <h4>Activate</h4>
+        <p>Sew to the garment. Open the scanner. First successful read activates the record on the registry — provenance is live.</p>
+        <div class="meta" id="order-step-4-meta">Awaiting</div>
+      </div>
+    </div>
+
+    <div class="order-actions">
+      <button class="btn btn-primary" id="btn-order-advance">Advance to next step</button>
+      <button class="btn" id="btn-order-reset">Reset</button>
+    </div>
+
+    <div class="order-summary">
+      <div>
+        <h3>Atelier dispatch</h3>
+        <p id="order-narrative">An identifier has been minted. When you're ready, generate the STL, send it to the print service, and stitch the resulting tile to your garment. The first scan activates the registry entry — and from then on, the pattern is the provenance.</p>
+      </div>
+      <div class="figures">
+        <div class="fig"><strong>Tile</strong><span class="v">30 mm Ø</span></div>
+        <div class="fig"><strong>Profile</strong><span class="v">2.5 mm tall</span></div>
+        <div class="fig"><strong>Material</strong><span class="v">Elastico™</span></div>
+        <div class="fig"><strong>Mass</strong><span class="v">~1.2 g</span></div>
+        <div class="fig"><strong>Lead time</strong><span class="v">3–5 days</span></div>
+        <div class="fig"><strong>Cost</strong><span class="v">€18 incl.</span></div>
+      </div>
+    </div>
+
+    <!-- 3D PRINT SPECIFICATION CARD -->
+    <div class="print-spec">
+      <div class="print-spec-header">
+        <h3>Manufacturing notes</h3>
+        <span class="print-spec-tag">PolyJet · Elastico™ · UV photopolymer</span>
+      </div>
+      <div class="print-spec-grid">
+        <div class="print-spec-block">
+          <div class="ps-label">Geometry</div>
+          <div class="ps-row"><span>Diameter</span><strong>30 mm</strong></div>
+          <div class="ps-row"><span>Base thickness</span><strong>1.5 mm</strong></div>
+          <div class="ps-row"><span>Total profile</span><strong>2.0 mm</strong></div>
+          <div class="ps-row"><span>Relief range</span><strong>0.3 – 0.8 mm</strong></div>
+          <div class="ps-row"><span>Engraving depth</span><strong>0.5 mm</strong></div>
+          <div class="ps-row"><span>RS rim markers</span><strong>32 × Ø 0.8 mm</strong></div>
+        </div>
+        <div class="print-spec-block">
+          <div class="ps-label">Print process</div>
+          <div class="ps-row"><span>Technology</span><strong>PolyJet / UV jetting</strong></div>
+          <div class="ps-row"><span>Layer thickness</span><strong>16 µm</strong></div>
+          <div class="ps-row"><span>Min feature</span><strong>0.1 mm</strong></div>
+          <div class="ps-row"><span>Curing</span><strong>UV lamp in-process</strong></div>
+          <div class="ps-row"><span>Supports</span><strong>wax — auto-removed</strong></div>
+          <div class="ps-row"><span>Print time</span><strong>2 – 3 h per batch</strong></div>
+        </div>
+        <div class="print-spec-block">
+          <div class="ps-label">Material &amp; durability</div>
+          <div class="ps-row"><span>Material</span><strong>Elastico™ (Stratasys)</strong></div>
+          <div class="ps-row"><span>Shore hardness</span><strong>27 – 40A (flexible)</strong></div>
+          <div class="ps-row"><span>Elongation at break</span><strong>218%</strong></div>
+          <div class="ps-row"><span>Wash cycles</span><strong>300+ at 40 °C</strong></div>
+          <div class="ps-row"><span>UV resistance</span><strong>requires opaque cover</strong></div>
+          <div class="ps-row"><span>Iron resistance</span><strong>up to 60 °C</strong></div>
+        </div>
+        <div class="print-spec-block">
+          <div class="ps-label">Stitching guide</div>
+          <div class="ps-row"><span>Anchor holes</span><strong>4 — printed in place</strong></div>
+          <div class="ps-row"><span>Thread</span><strong>waxed linen, ~0.4 mm</strong></div>
+          <div class="ps-row"><span>Stitch type</span><strong>cross or whip</strong></div>
+          <div class="ps-row"><span>No piercing needed</span><strong>holes pre-formed</strong></div>
+          <div class="ps-row"><span>Position on garment</span><strong>flat panel, any flex</strong></div>
+          <div class="ps-row"><span>Avoid</span><strong>direct iron contact</strong></div>
+        </div>
+      </div>
+      <p class="print-spec-footer">
+        Elastico™ is a flexible UV-cured photopolymer printed at 16&nbsp;µm layer resolution via PolyJet — 12× finer than FDM. This resolves the full codec detail at sub-0.1&nbsp;mm feature sizes, produces a smooth matte surface that reads well under raking light, and yields a tile that flexes with the garment. Minimum bend radius is effectively zero; the tile can be folded flat without cracking.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<div class="status-line" id="status-line"></div>
+
+<script>
+'use strict';
+
+// ============================================================================
+// REED–SOLOMON over GF(256), prim 0x11D — matches Python reedsolo.
+// Encoder + erasure-only decoder + minimal Berlekamp-Massey for 1-error case.
+// ============================================================================
+const RS = (() => {
+  const PRIM = 0x11d;
+  const exp = new Uint8Array(512);
+  const log = new Uint8Array(256);
+  let x = 1;
+  for (let i = 0; i < 255; i++) {
+    exp[i] = x; log[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= PRIM;
+  }
+  for (let i = 255; i < 512; i++) exp[i] = exp[i - 255];
+
+  const mul = (a, b) => (a === 0 || b === 0) ? 0 : exp[(log[a] + log[b]) % 255];
+  const div = (a, b) => {
+    if (a === 0) return 0;
+    if (b === 0) throw new Error('div by zero');
+    return exp[(log[a] + 255 - log[b]) % 255];
+  };
+  const pow = (a, n) => a === 0 ? 0 : exp[(log[a] * n) % 255];
+
+  function generator(nsym) {
+    let g = [1];
+    for (let i = 0; i < nsym; i++) {
+      const next = new Array(g.length + 1).fill(0);
+      for (let j = 0; j < g.length; j++) {
+        next[j] ^= g[j];
+        next[j + 1] ^= mul(g[j], exp[i]);
+      }
+      g = next;
+    }
+    return g;
+  }
+
+  function encode(msg, nsym) {
+    const gen = generator(nsym);
+    const out = new Uint8Array(msg.length + nsym);
+    out.set(msg);
+    for (let i = 0; i < msg.length; i++) {
+      const coef = out[i];
+      if (coef !== 0) {
+        for (let j = 1; j < gen.length; j++) {
+          out[i + j] ^= mul(gen[j], coef);
+        }
+      }
+    }
+    out.set(msg, 0);
+    return out;
+  }
+
+  function syndromes(cw, nsym) {
+    const s = new Uint8Array(nsym);
+    for (let i = 0; i < nsym; i++) {
+      let v = 0;
+      for (let j = 0; j < cw.length; j++) {
+        v = mul(v, exp[i]) ^ cw[j];
+      }
+      s[i] = v;
+    }
+    return s;
+  }
+
+  // Berlekamp-Massey to find error locator polynomial (max 2 errors with nsym=4).
+  function berlekampMassey(synd) {
+    let sigma = [1];
+    let prev = [1];
+    let L = 0;
+    let m = 1;
+    let b = 1;
+    for (let n = 0; n < synd.length; n++) {
+      let delta = synd[n];
+      for (let i = 1; i <= L; i++) {
+        delta ^= mul(sigma[i] || 0, synd[n - i]);
+      }
+      if (delta === 0) {
+        m++;
+      } else if (2 * L <= n) {
+        const T = sigma.slice();
+        const coef = div(delta, b);
+        // sigma = sigma - delta/b * x^m * prev
+        const newSigma = sigma.slice();
+        for (let i = 0; i < prev.length; i++) {
+          while (newSigma.length <= i + m) newSigma.push(0);
+          newSigma[i + m] ^= mul(coef, prev[i]);
+        }
+        sigma = newSigma;
+        L = n + 1 - L;
+        prev = T;
+        b = delta;
+        m = 1;
+      } else {
+        const coef = div(delta, b);
+        for (let i = 0; i < prev.length; i++) {
+          while (sigma.length <= i + m) sigma.push(0);
+          sigma[i + m] ^= mul(coef, prev[i]);
+        }
+        m++;
+      }
+    }
+    return { sigma, L };
+  }
+
+  function chienSearch(sigma, n) {
+    const errPos = [];
+    for (let i = 0; i < n; i++) {
+      let s = 0;
+      for (let j = 0; j < sigma.length; j++) {
+        s ^= mul(sigma[j], pow(exp[i], j));
+      }
+      if (s === 0) {
+        errPos.push(n - 1 - i);
+      }
+    }
+    return errPos;
+  }
+
+  // Solve for error magnitudes given known error positions.
+  // Each syndrome S_i = sum over errors e at position p of e * (alpha^i)^p_power
+  // where p_power = n-1-p (since the codeword polynomial is c[0]*x^(n-1) + ...).
+  // This gives a linear system: V * e = S, where V[i][k] = (alpha^i)^(n-1-pos[k]).
+  function solveMagnitudes(positions, synd, n) {
+    const k = positions.length;
+    if (k === 0) return [];
+    // Build augmented matrix [V | S]
+    const m = synd.length;
+    const M = [];
+    for (let i = 0; i < m; i++) {
+      const row = new Array(k + 1);
+      for (let c = 0; c < k; c++) {
+        // V[i][c] = (alpha^i)^(n-1-positions[c]) = alpha^(i*(n-1-positions[c]))
+        const expPow = (i * (n - 1 - positions[c])) % 255;
+        row[c] = expPow < 0 ? exp[(expPow + 255) % 255] : exp[expPow];
+      }
+      row[k] = synd[i];
+      M.push(row);
+    }
+    // Gaussian elimination over GF(256)
+    let r = 0;
+    for (let c = 0; c < k && r < m; c++) {
+      // Find pivot
+      let piv = -1;
+      for (let i = r; i < m; i++) {
+        if (M[i][c] !== 0) { piv = i; break; }
+      }
+      if (piv < 0) return null; // No unique solution
+      if (piv !== r) [M[r], M[piv]] = [M[piv], M[r]];
+      // Normalize row
+      const inv = div(1, M[r][c]);
+      for (let cc = c; cc <= k; cc++) M[r][cc] = mul(M[r][cc], inv);
+      // Eliminate
+      for (let i = 0; i < m; i++) {
+        if (i !== r && M[i][c] !== 0) {
+          const factor = M[i][c];
+          for (let cc = c; cc <= k; cc++) {
+            M[i][cc] ^= mul(factor, M[r][cc]);
+          }
+        }
+      }
+      r++;
+    }
+    // Check rows r..m all zero
+    for (let i = r; i < m; i++) {
+      if (M[i][k] !== 0) return null;
+    }
+    // Extract magnitudes
+    const mags = new Array(k).fill(0);
+    for (let i = 0; i < r; i++) {
+      // Find leading 1 in row i
+      for (let c = 0; c < k; c++) {
+        if (M[i][c] === 1) { mags[c] = M[i][k]; break; }
+      }
+    }
+    return mags;
+  }
+
+  // Decode by brute-force searching error positions, then solving.
+  // For RS-4 with up to e erasures and t errors where 2t + e <= 4.
+  function decode(codeword, nsym, erasures = []) {
+    const cw = new Uint8Array(codeword);
+    const synd = syndromes(cw, nsym);
+    if (synd.every(s => s === 0)) {
+      return cw.slice(0, cw.length - nsym);
+    }
+    const n = cw.length;
+    const erasureSet = new Set(erasures);
+    const maxErrors = Math.floor((nsym - erasures.length) / 2);
+
+    // Try increasing number of additional error positions: 0, 1, 2, ...
+    for (let nErr = 0; nErr <= maxErrors; nErr++) {
+      // Generate all combinations of nErr positions from {0..n-1} \ erasureSet
+      const candidates = [];
+      for (let p = 0; p < n; p++) if (!erasureSet.has(p)) candidates.push(p);
+
+      const combos = combinations(candidates, nErr);
+      for (const combo of combos) {
+        const positions = erasures.concat(combo);
+        const mags = solveMagnitudes(positions, synd, n);
+        if (!mags) continue;
+        // Apply magnitudes
+        const corrected = new Uint8Array(cw);
+        for (let i = 0; i < positions.length; i++) {
+          corrected[positions[i]] ^= mags[i];
+        }
+        // Verify
+        const v = syndromes(corrected, nsym);
+        if (v.every(s => s === 0)) {
+          return corrected.slice(0, cw.length - nsym);
+        }
+      }
+    }
+    return null;
+  }
+
+  function combinations(arr, k) {
+    if (k === 0) return [[]];
+    if (k > arr.length) return [];
+    const result = [];
+    function rec(start, picked) {
+      if (picked.length === k) { result.push(picked.slice()); return; }
+      for (let i = start; i < arr.length; i++) {
+        picked.push(arr[i]);
+        rec(i + 1, picked);
+        picked.pop();
+      }
+    }
+    rec(0, []);
+    return result;
+  }
+
+  function polyMul(a, b) {
+    const out = new Array(a.length + b.length - 1).fill(0);
+    for (let i = 0; i < a.length; i++) {
+      for (let j = 0; j < b.length; j++) {
+        out[i + j] ^= mul(a[i], b[j]);
+      }
+    }
+    return out;
+  }
+
+  function polyMod(p, k) {
+    return p.slice(0, k);
+  }
+
+  return { encode, decode, mul, div, exp, log };
+})();
+
+// ============================================================================
+// CODEC — encode/decode item IDs through 5 channels + RS-4
+// Mirrors codec/pattern_codec.py exactly.
+// ============================================================================
+const PAYLOAD_BYTES = 4;
+const RS_PARITY = 4;
+const TOTAL_BYTES = PAYLOAD_BYTES + RS_PARITY;
+
+function encodeId(itemId) {
+  const payload = new Uint8Array(4);
+  payload[0] = (itemId >>> 24) & 0xFF;
+  payload[1] = (itemId >>> 16) & 0xFF;
+  payload[2] = (itemId >>>  8) & 0xFF;
+  payload[3] =  itemId         & 0xFF;
+  const cw = RS.encode(payload, RS_PARITY);
+  return {
+    macro:  (payload[0] >> 4) & 0x0F,
+    count:   payload[0]       & 0x0F,
+    height:  payload[1],
+    angles:  payload[2],
+    micro:   payload[3],
+    rs: cw.slice(PAYLOAD_BYTES),
+  };
+}
+
+function decodeChannels(channels) {
+  const { macro, count, height, angles, micro, rs } = channels;
+  const erasures = [];
+  let b0 = 0, b1 = 0, b2 = 0, b3 = 0;
+  if (macro != null && count != null) b0 = ((macro & 0x0F) << 4) | (count & 0x0F);
+  else erasures.push(0);
+  if (height != null) b1 = height; else erasures.push(1);
+  if (angles != null) b2 = angles; else erasures.push(2);
+  if (micro  != null) b3 = micro;  else erasures.push(3);
+
+  let rsBytes;
+  if (rs && rs.length === RS_PARITY) {
+    rsBytes = rs;
+  } else {
+    rsBytes = new Uint8Array(RS_PARITY);
+    erasures.push(4, 5, 6, 7);
+  }
+
+  const cw = new Uint8Array(TOTAL_BYTES);
+  cw[0] = b0; cw[1] = b1; cw[2] = b2; cw[3] = b3;
+  cw.set(rsBytes, 4);
+
+  const slotsRead = [macro, count, height, angles, micro, rs].filter(x => x != null).length;
+
+  // First attempt: trust the channels we have
+  let result = RS.decode(cw, RS_PARITY, erasures);
+
+  // If that failed, the perception was probably wrong about one or more
+  // payload bytes. Try erasing each payload byte (least reliable first) and
+  // retrying. This effectively asks: "what if this channel is wrong, can RS
+  // figure out what it should have been?"
+  if (!result) {
+    // Try erasing one payload byte at a time, prioritizing height (continuous,
+    // most likely off by calibration), then angles (close fitting), then b0
+    // (count is fragile against peak miscount).
+    const tryOrder = [1, 2, 0, 3]; // height, angles, b0, micro
+    for (const extraErasure of tryOrder) {
+      if (erasures.includes(extraErasure)) continue;
+      const ext = erasures.concat([extraErasure]);
+      if (ext.length > RS_PARITY) break;
+      result = RS.decode(cw, RS_PARITY, ext);
+      if (result) break;
+    }
+  }
+  // Try erasing two payload bytes
+  if (!result) {
+    const payloadAvailable = [0, 1, 2, 3].filter(i => !erasures.includes(i));
+    for (let a = 0; a < payloadAvailable.length; a++) {
+      for (let b = a + 1; b < payloadAvailable.length; b++) {
+        const ext = erasures.concat([payloadAvailable[a], payloadAvailable[b]]);
+        if (ext.length > RS_PARITY) continue;
+        result = RS.decode(cw, RS_PARITY, ext);
+        if (result) break;
+      }
+      if (result) break;
+    }
+  }
+
+  if (result) {
+    const id = (result[0] << 24 | result[1] << 16 | result[2] << 8 | result[3]) >>> 0;
+
+    // Sanity check: re-encode the recovered ID and verify the observed
+    // channels are consistent with it. Two strong signals:
+    //   1. rs parity match: the observed rs bytes equal the re-encoded rs.
+    //   2. payload agreement: macro/count/height/angles match what we read.
+    // A clean rs match with no payload disagreement is enough; otherwise we
+    // need a clear majority of observed payload channels to agree.
+    const reCh = encodeId(id);
+    let payloadAgree = 0, payloadDisagree = 0;
+    if (macro  != null) (macro  === reCh.macro)  ? payloadAgree++ : payloadDisagree++;
+    if (count  != null) (count  === reCh.count)  ? payloadAgree++ : payloadDisagree++;
+    if (height != null) (Math.abs(height - reCh.height) <= 25) ? payloadAgree++ : payloadDisagree++;
+    if (angles != null) (angles === reCh.angles) ? payloadAgree++ : payloadDisagree++;
+
+    let rsMatch = false;
+    if (rs && reCh.rs && rs.length === 4) {
+      rsMatch = rs[0]===reCh.rs[0] && rs[1]===reCh.rs[1] &&
+                rs[2]===reCh.rs[2] && rs[3]===reCh.rs[3];
+    }
+
+    // Accept if: (a) rs matches AND not all observed payloads disagree, OR
+    // (b) payload majority agrees independently.
+    const accept =
+      (rsMatch && (payloadAgree > 0 || payloadDisagree === 0)) ||
+      (payloadAgree >= 2 && payloadAgree > payloadDisagree);
+    if (accept) {
+      return {
+        itemId: id,
+        confidence: slotsRead / 6,
+        level: slotsRead === 6 && erasures.length === 0 ? 'full' : 'rs_corrected',
+      };
+    }
+    // Fall through — recovered ID looks suspicious
+  }
+
+  // Fallback: if we have macro+count, give category-only
+  if (macro != null && count != null) {
+    return {
+      itemId: null,
+      confidence: 2 / 6,
+      level: 'category_only',
+      macro, count,
+    };
+  }
+  return { itemId: null, confidence: 0, level: 'lost' };
+}
+
+// ============================================================================
+// MACRO FAMILIES & SIGNATURES (must match Python exactly)
+// ============================================================================
+const MACRO_FAMILIES = [
+  'circle', 'triangle', 'hexagon', 'square',
+  'star_5', 'star_6', 'star_8', 'rosette',
+  'wave', 'pinwheel', 'diamond', 'octagon',
+  'petal', 'gear', 'spiral', 'cross',
+];
+
+const MACRO_SIGS = [
+  [2, 0, 0, 1],   [3, 0, 0, 1],   [6, 0, 0, 1],   [4, 0, 0, 1],
+  [5, 0, 0, 1],   [6, 2, 0, 1],   [8, 0, 0, 1],   [2, 4, 0.5, 1],
+  [2, 0, 0, 0],   [4, 0, 0, 0],   [4, 2, 0, 1],   [8, 4, 0, 1],
+  [5, 10, 0, 1],  [12, 0, 0, 1],  [4, 0, 0, -1],  [2, 6, 0.5, 1],
+];
+
+const RADIUS_MM = 15;
+const BASE_MM = 1.5;     // thicker base for durability on flexing fabric
+const RES = 128;
+
+// Height budget (all values in mm) — designed for PolyJet Elastico™ (16 µm layers):
+// total tile profile stays under ~2.5mm typical, ~3.5mm worst case at rim.
+// Layer height 16µm → ~125 layers per mm. Print time ~2-3h PolyJet batch.
+const PROT_H_MIN  = 0.40;  // shortest protrusion
+const PROT_H_MAX  = 0.90;  // tallest protrusion (was 8mm — far too sharp)
+const RS_LOW_H    = 0.35;  // RS marker bit=0 (was 1.0)
+const RS_HIGH_H   = 0.95;  // RS marker bit=1 (was 3.0)
+const MACRO_AMP   = 0.20;  // macro signature (was 0.4)
+const MICRO_AMP   = 0.15;  // micro noise (was 0.5)
+const ENGRAVE_DEPTH = 0.70; // motif engraving — deeper than before, dominant visual
+
+// ============================================================================
+// HEIGHT FIELD BUILDER — Python parity
+// ============================================================================
+function buildHeightField(ch, wear = 0) {
+  const { macro, count, height, angles, micro, rs } = ch;
+  // Map 8-bit height into the print-safe protrusion range
+  const peak_h = PROT_H_MIN + (height / 255) * (PROT_H_MAX - PROT_H_MIN);
+  const n = 3 + (count % 16);
+
+  const base = (angles >> 4) & 0x0F;
+  const modul = angles & 0x0F;
+  const baseOff = (base / 16) * 2 * Math.PI;
+  const modAmp = (modul / 15) * (Math.PI / n);
+  const rotations = [];
+  for (let i = 0; i < n; i++) {
+    rotations.push(baseOff + i * (2 * Math.PI / n) + modAmp * Math.sin(2 * i));
+  }
+
+  const sig = MACRO_SIGS[macro % 16];
+
+  const rsBits = new Array(32);
+  for (let b = 0; b < 4; b++) {
+    for (let i = 0; i < 8; i++) {
+      rsBits[b * 8 + i] = (rs[b] >> (7 - i)) & 1;
+    }
+  }
+
+  const microKeep = Math.max(0, 1 - wear / 0.4);
+  const mesoKeep  = wear > 0.3 ? Math.max(0, 1 - (wear - 0.3) / 0.4) : 1;
+  const macroKeep = wear > 0.7 ? Math.max(0, 1 - (wear - 0.7) / 0.3) : 1;
+
+  const field = new Float32Array(RES * RES);
+  const dx = (2 * RADIUS_MM) / (RES - 1);
+
+  // Pre-compute sigma values
+  const protSigma = Math.max(RADIUS_MM / (1.5 * n), 1.5 * dx);
+  const protSig2 = 2 * protSigma * protSigma;
+  const rsSigma = RADIUS_MM / 24;
+  const rsSig2 = 2 * rsSigma * rsSigma;
+
+  for (let j = 0; j < RES; j++) {
+    const y = -RADIUS_MM + j * dx;
+    for (let i = 0; i < RES; i++) {
+      const x = -RADIUS_MM + i * dx;
+      const r = Math.sqrt(x * x + y * y);
+      const idx = j * RES + i;
+
+      if (r > RADIUS_MM) { field[idx] = 0; continue; }
+
+      const theta = Math.atan2(y, x);
+      const rNorm = r / RADIUS_MM;
+
+      // Macro
+      let m = 0;
+      const [primary, secondary, phase, mode] = sig;
+      if (mode === 1) {
+        const radial = 1 - rNorm;
+        m = MACRO_AMP * Math.cos(primary * theta) * radial;
+        if (secondary > 0) m += MACRO_AMP * 0.85 * Math.cos(secondary * theta + phase * Math.PI) * radial;
+      } else if (mode === 0) {
+        m = MACRO_AMP * Math.cos(primary * theta + 6 * rNorm);
+      } else {
+        m = MACRO_AMP * Math.cos(primary * theta - 8 * rNorm);
+      }
+      m *= macroKeep;
+
+      // Protrusions — flat-topped super-Gaussian (smooth jewelry-style domes
+      // instead of sharp Gaussian needles). Same peak height, same effective
+      // width at the half-power point, but a soft plateau on top with rounded
+      // shoulders.
+      let prot = 0;
+      const protSigSq = protSigma * protSigma;
+      for (const t of rotations) {
+        const cx = 0.65 * RADIUS_MM * Math.cos(t);
+        const cy = 0.65 * RADIUS_MM * Math.sin(t);
+        const d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        // exp(-(d²/σ²)²) gives a flat top that rolls off softly
+        const u = d2 / protSigSq;
+        prot += peak_h * Math.exp(-u * u);
+      }
+      prot *= mesoKeep;
+
+      // Micro (deterministic seeded noise)
+      const seed = ((Math.floor((x + 15) * 8) * 73856093) ^
+                    (Math.floor((y + 15) * 8) * 19349663) ^
+                    (micro * 8191 + 17)) >>> 0;
+      const mc = (((seed * 9301 + 49297) % 233280) / 233280 - 0.5) * MICRO_AMP * microKeep;
+
+      // RS markers
+      let rsField = 0;
+      const rsSigSq = rsSigma * rsSigma;
+      for (let k = 0; k < 32; k++) {
+        const angle = (k / 32) * 2 * Math.PI;
+        const mcx = 0.92 * RADIUS_MM * Math.cos(angle);
+        const mcy = 0.92 * RADIUS_MM * Math.sin(angle);
+        const d2 = (x - mcx) * (x - mcx) + (y - mcy) * (y - mcy);
+        if (d2 < (3.5 * rsSigma) * (3.5 * rsSigma)) {
+          const level = rsBits[k] ? RS_HIGH_H : RS_LOW_H;
+          // Same flat-topped profile for jewelry-like beads
+          const u = d2 / rsSigSq;
+          rsField += level * Math.exp(-u * u);
+        }
+      }
+      rsField *= mesoKeep;
+
+      let h = BASE_MM + m + prot + mc + rsField;
+      h = Math.max(h, BASE_MM);
+      field[idx] = h;
+    }
+  }
+  return field;
+}
+
+// ============================================================================
+// CHANNEL EXTRACTOR — JS port of perception/perception.py
+// Takes a height field, recovers each channel (or returns null for unreadable).
+// ============================================================================
+function bilinearSample(field, res, worldX, worldY, radius) {
+  const px = (worldX + radius) / (2 * radius) * (res - 1);
+  const py = (worldY + radius) / (2 * radius) * (res - 1);
+  const x0 = Math.max(0, Math.min(res - 1, Math.floor(px)));
+  const x1 = Math.max(0, Math.min(res - 1, x0 + 1));
+  const y0 = Math.max(0, Math.min(res - 1, Math.floor(py)));
+  const y1 = Math.max(0, Math.min(res - 1, y0 + 1));
+  const wx = px - x0;
+  const wy = py - y0;
+  return field[y0 * res + x0] * (1 - wx) * (1 - wy) +
+         field[y0 * res + x1] *      wx  * (1 - wy) +
+         field[y1 * res + x0] * (1 - wx) *      wy  +
+         field[y1 * res + x1] *      wx  *      wy;
+}
+
+function findPeaks(arr, minHeight) {
+  const n = arr.length;
+  const peaks = [];
+  for (let i = 0; i < n; i++) {
+    const v = arr[i];
+    if (v < minHeight) continue;
+    const left  = arr[(i - 1 + n) % n];
+    const right = arr[(i + 1) % n];
+    if (v > left && v >= right) peaks.push(i);
+  }
+  if (!peaks.length) return [];
+  peaks.sort((a, b) => arr[b] - arr[a]);
+  const keep = [];
+  const minSep = n / 36; // ~10°
+  for (const p of peaks) {
+    if (keep.every(k => Math.min(Math.abs(p - k), n - Math.abs(p - k)) > minSep)) {
+      keep.push(p);
+    }
+  }
+  return keep.sort((a, b) => a - b);
+}
+
+function fitAngles(peaks, nSamples, nProt) {
+  const observed = peaks.map(p => 2 * Math.PI * p / nSamples - Math.PI).sort((a, b) => a - b);
+  let bestByte = null;
+  let bestErr = Infinity;
+  for (let byte = 0; byte < 256; byte++) {
+    const base = (byte >> 4) & 0x0F;
+    const modul = byte & 0x0F;
+    const baseOff = (base / 16) * 2 * Math.PI;
+    const modAmp = (modul / 15) * (Math.PI / nProt);
+    const rots = [];
+    for (let i = 0; i < nProt; i++) {
+      let r = baseOff + i * (2 * Math.PI / nProt) + modAmp * Math.sin(2 * i);
+      r = ((r + Math.PI) % (2 * Math.PI)) - Math.PI;
+      rots.push(r);
+    }
+    rots.sort((a, b) => a - b);
+    let err = 0;
+    for (let k = 0; k < nProt; k++) err += Math.abs(rots[k] - observed[k]);
+    err /= nProt;
+    if (err < bestErr) {
+      bestErr = err;
+      bestByte = byte;
+    }
+  }
+  if (bestErr < (15 * Math.PI / 180)) return bestByte;
+  return null;
+}
+
+function detectMacro(relief, res, radius, peakThetas, peakH) {
+  const dx = (2 * radius) / (res - 1);
+  // Subtract predicted protrusions
+  const subbed = new Float32Array(relief);
+  if (peakThetas && peakH > 0) {
+    const n = peakThetas.length;
+    const sigma = Math.max(radius / (1.5 * n), 1.5 * dx);
+    const sig2 = 2 * sigma * sigma;
+    for (let j = 0; j < res; j++) {
+      const y = -radius + j * dx;
+      for (let i = 0; i < res; i++) {
+        const x = -radius + i * dx;
+        let bump = 0;
+        for (const t of peakThetas) {
+          const cx = 0.65 * radius * Math.cos(t);
+          const cy = 0.65 * radius * Math.sin(t);
+          const d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+          bump += peakH * Math.exp(-d2 / sig2);
+        }
+        subbed[j * res + i] -= bump;
+      }
+    }
+  }
+
+  // Score each macro template (L2-normalized)
+  const scores = [];
+  for (let m = 0; m < 16; m++) {
+    const [primary, secondary, phase, mode] = MACRO_SIGS[m];
+    let score = 0, normSq = 0;
+    let masked = 0;
+    for (let j = 0; j < res; j++) {
+      const y = -radius + j * dx;
+      for (let i = 0; i < res; i++) {
+        const x = -radius + i * dx;
+        const r = Math.sqrt(x * x + y * y);
+        if (r > radius) continue;
+        if (r < 0.2 * radius || r > 0.5 * radius) continue;
+        const theta = Math.atan2(y, x);
+        const rNorm = r / radius;
+        let t;
+        if (mode === 1) {
+          const radial = 1 - rNorm;
+          t = 0.4 * Math.cos(primary * theta) * radial;
+          if (secondary > 0) t += 0.35 * Math.cos(secondary * theta + phase * Math.PI) * radial;
+        } else if (mode === 0) {
+          t = 0.4 * Math.cos(primary * theta + 6 * rNorm);
+        } else {
+          t = 0.4 * Math.cos(primary * theta - 8 * rNorm);
+        }
+        score += subbed[j * res + i] * t;
+        normSq += t * t;
+        masked++;
+      }
+    }
+    const norm = Math.sqrt(normSq);
+    scores.push({ macro: m, score: norm > 1e-9 ? score / norm : 0 });
+  }
+  scores.sort((a, b) => b.score - a.score);
+  if (scores[0].score > 0 && scores[0].score > 1.10 * Math.abs(scores[1].score)) {
+    return scores[0].macro;
+  }
+  return null;
+}
+
+function readRsMarkers(field, res, radius) {
+  const baseLevel = BASE_MM;
+  const levels = [];
+  for (let k = 0; k < 32; k++) {
+    const angle = (k / 32) * 2 * Math.PI;
+    const cx = 0.92 * radius * Math.cos(angle);
+    const cy = 0.92 * radius * Math.sin(angle);
+    let maxV = -Infinity;
+    for (let da = 0; da < 8; da++) {
+      const a = (da / 8) * 2 * Math.PI;
+      for (const dr of [0, 0.3]) {
+        const sx = cx + dr * radius * 0.04 * Math.cos(a);
+        const sy = cy + dr * radius * 0.04 * Math.sin(a);
+        const v = bilinearSample(field, res, sx, sy, radius);
+        if (v > maxV) maxV = v;
+      }
+    }
+    levels.push(maxV - baseLevel);
+  }
+  // RS markers print at RS_LOW_H (0.35mm) or RS_HIGH_H (0.95mm). Threshold
+  // for "marker present at all" must catch 0.35mm minus wear; threshold for
+  // "high vs low" sits at the midpoint ~0.6mm.
+  const presentThr = (RS_LOW_H * 0.5);  // ~0.18mm — well above noise
+  const highVsLowThr = (RS_LOW_H + RS_HIGH_H) / 2;  // ~0.65mm
+  const present = levels.filter(v => v > presentThr).length;
+  if (present < 16) return null;
+
+  const bits = levels.map(v => v > highVsLowThr ? 1 : 0);
+  const out = new Uint8Array(4);
+  for (let b = 0; b < 4; b++) {
+    let v = 0;
+    for (let i = 0; i < 8; i++) v = (v << 1) | bits[b * 8 + i];
+    out[b] = v;
+  }
+  return out;
+}
+
+function extractChannels(field, res = RES, radius = RADIUS_MM) {
+  const result = {
+    macro: null, count: null, height: null,
+    angles: null, micro: null, rs: null,
+    diagnostics: {},
+  };
+
+  // Ring sample at r=0.65R for protrusions
+  const nSamples = 360;
+  const ringR = 0.65 * radius;
+  const ringRaw = new Float32Array(nSamples);
+  for (let i = 0; i < nSamples; i++) {
+    const theta = -Math.PI + (i / nSamples) * 2 * Math.PI;
+    const x = ringR * Math.cos(theta);
+    const y = ringR * Math.sin(theta);
+    ringRaw[i] = Math.max(0, bilinearSample(field, res, x, y, radius) - BASE_MM);
+  }
+  // Smooth the ring with a 7-tap moving average to suppress bilinear-sampling
+  // jitter that bilinear interpolation introduces (vs scipy's cubic in the
+  // Python reference). Without this, wide bumps for low-count IDs (n=3,4,5)
+  // produce spurious local maxima inside one true peak.
+  const ringVals = new Float32Array(nSamples);
+  const halfW = 2;
+  for (let i = 0; i < nSamples; i++) {
+    let s = 0;
+    for (let k = -halfW; k <= halfW; k++) {
+      s += ringRaw[(i + k + nSamples) % nSamples];
+    }
+    ringVals[i] = s / (2 * halfW + 1);
+  }
+  // Peak detection threshold: bumps are now 0.4..0.9mm tall (post-smoothing,
+  // typical observed height ~85% of peak_h ≈ 0.34..0.77mm at the ring).
+  // Micro noise band is ±0.15mm so threshold at 0.28mm reliably separates.
+  const peaks = findPeaks(ringVals, 0.28);
+  result.diagnostics.nPeaks = peaks.length;
+
+  let peakThetas = [];
+  let peakH = 0;
+  if (peaks.length >= 3 && peaks.length <= 18) {
+    const n = peaks.length;
+    result.count = (n - 3) & 0x0F;
+    let avgH = 0;
+    for (const p of peaks) avgH += ringVals[p];
+    avgH /= peaks.length;
+    // Calibration: at the ring radius, a peak sample receives the protrusion's
+    // own contribution plus overlap from the two neighbours. The ratio is
+    // count-dependent but ~1.3..1.6 across the practical range; 1.4 is the
+    // average. Residual error in the height byte is recovered by RS-4.
+    avgH /= 1.40;
+    peakH = avgH;
+    avgH = Math.max(PROT_H_MIN, Math.min(PROT_H_MAX, avgH));
+    result.height = Math.round((avgH - PROT_H_MIN) / (PROT_H_MAX - PROT_H_MIN) * 255);
+
+    const fitted = fitAngles(peaks, nSamples, n);
+    if (fitted !== null) {
+      result.angles = fitted;
+      const base = (fitted >> 4) & 0x0F;
+      const modul = fitted & 0x0F;
+      const baseOff = (base / 16) * 2 * Math.PI;
+      const modAmp = (modul / 15) * (Math.PI / n);
+      for (let i = 0; i < n; i++) {
+        let t = baseOff + i * (2 * Math.PI / n) + modAmp * Math.sin(2 * i);
+        t = ((t + Math.PI) % (2 * Math.PI)) - Math.PI;
+        peakThetas.push(t);
+      }
+    }
+  }
+
+  // Build relief field for macro detection
+  const relief = new Float32Array(field.length);
+  for (let i = 0; i < field.length; i++) {
+    relief[i] = Math.max(0, field[i] - BASE_MM);
+  }
+  const macro = detectMacro(relief, res, radius, peakThetas, peakH);
+  if (macro !== null) result.macro = macro;
+
+  // RS markers
+  result.rs = readRsMarkers(field, res, radius);
+  // Micro: not extracted (requires RNG inversion); leave null, RS recovers
+  return result;
+}
+
+// ============================================================================
+// 3D RENDERER — shared between parametric/draw/photo
+// ============================================================================
+class Tile3D {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setClearColor(0x000000, 0);
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(35, 1, 0.1, 1000);
+    // Camera angled for low-profile tiles — closer and more oblique so the
+    // ~2.5mm relief reads as relief, not as a flat disc.
+    this.camera.position.set(16, 14, 22);
+    this.camera.lookAt(0, 1.2, 0);
+
+    this.scene.add(new THREE.AmbientLight(0xfff4e0, 0.35));
+    const key = new THREE.DirectionalLight(0xfff0d0, 0.95);
+    key.position.set(-10, 18, 10);
+    this.scene.add(key);
+    const fill = new THREE.DirectionalLight(0xc4d8ff, 0.35);
+    fill.position.set(12, 8, -6);
+    this.scene.add(fill);
+
+    this.mesh = null;
+    this.spinning = true;
+    this.resize();
+    new ResizeObserver(() => this.resize()).observe(canvas);
+  }
+  resize() {
+    const r = this.canvas.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return;
+    this.renderer.setSize(r.width, r.height, false);
+    this.camera.aspect = r.width / r.height;
+    this.camera.updateProjectionMatrix();
+  }
+  setField(field, res = RES, radius = RADIUS_MM, palette = null) {
+    if (this.mesh) {
+      this.mesh.geometry.dispose();
+      this.mesh.material.dispose();
+      this.scene.remove(this.mesh);
+    }
+    // Default editorial palette (cream/ink/sienna)
+    const pal = palette || {
+      body:    [0.93, 0.88, 0.78],
+      bumps:   [0.83, 0.69, 0.49],
+      accent:  [0.72, 0.28, 0.17],
+      side:    [0.80, 0.74, 0.62],
+    };
+    // Helper: pick color by height. Updated for low-profile tiles where
+    // total relief only goes 0..1.0mm above base, with engraved zones below.
+    function colorAt(h) {
+      const above = h - BASE_MM;
+      if (above < -0.05) {
+        // Engraved zone — depth indicates how far below base.
+        // Engravings go to ~0.7mm below base (h ≈ 0.8mm).
+        const depth = Math.min(1, (-above) / 0.7);
+        return [
+          pal.body[0] * (1 - depth * 0.85) + pal.accent[0] * (depth * 0.85),
+          pal.body[1] * (1 - depth * 0.85) + pal.accent[1] * (depth * 0.85),
+          pal.body[2] * (1 - depth * 0.85) + pal.accent[2] * (depth * 0.85),
+        ];
+      } else if (above < 0.25) {
+        // Body / base zone
+        return [pal.body[0], pal.body[1], pal.body[2]];
+      } else {
+        // Bumps zone — gradient from body to bumps over the 0.25..1.0mm range
+        const t = Math.min(1, (above - 0.25) / 0.75);
+        return [
+          pal.body[0] + (pal.bumps[0] - pal.body[0]) * t,
+          pal.body[1] + (pal.bumps[1] - pal.body[1]) * t,
+          pal.body[2] + (pal.bumps[2] - pal.body[2]) * t,
+        ];
+      }
+    }
+    const dx = (2 * radius) / (res - 1);
+    const inside = new Uint8Array(res * res);
+    const idxTop = new Int32Array(res * res).fill(-1);
+    const idxBot = new Int32Array(res * res).fill(-1);
+    const verts = [];
+    const colors = [];
+
+    for (let j = 0; j < res; j++) {
+      for (let i = 0; i < res; i++) {
+        const k = j * res + i;
+        if (field[k] > 0) {
+          const x = -radius + i * dx;
+          const y = -radius + j * dx;
+          idxTop[k] = verts.length / 3;
+          verts.push(x, field[k], -y);
+          const c = colorAt(field[k]);
+          colors.push(c[0], c[1], c[2]);
+          inside[k] = 1;
+        }
+      }
+    }
+    for (let j = 0; j < res; j++) {
+      for (let i = 0; i < res; i++) {
+        const k = j * res + i;
+        if (inside[k]) {
+          const x = -radius + i * dx;
+          const y = -radius + j * dx;
+          idxBot[k] = verts.length / 3;
+          verts.push(x, 0, -y);
+          colors.push(pal.side[0], pal.side[1], pal.side[2]);
+        }
+      }
+    }
+
+    const indices = [];
+    for (let j = 0; j < res - 1; j++) {
+      for (let i = 0; i < res - 1; i++) {
+        const a = idxTop[j * res + i];
+        const b = idxTop[j * res + i + 1];
+        const c = idxTop[(j + 1) * res + i + 1];
+        const d = idxTop[(j + 1) * res + i];
+        if (a < 0 || b < 0 || c < 0 || d < 0) continue;
+        indices.push(a, b, c, a, c, d);
+      }
+    }
+    for (let j = 0; j < res - 1; j++) {
+      for (let i = 0; i < res - 1; i++) {
+        const a = idxBot[j * res + i];
+        const b = idxBot[j * res + i + 1];
+        const c = idxBot[(j + 1) * res + i + 1];
+        const d = idxBot[(j + 1) * res + i];
+        if (a < 0 || b < 0 || c < 0 || d < 0) continue;
+        indices.push(a, c, b, a, d, c);
+      }
+    }
+    // Side walls
+    for (let j = 0; j < res; j++) {
+      for (let i = 0; i < res; i++) {
+        const k = j * res + i;
+        if (!inside[k]) continue;
+        if (i + 1 < res && !inside[k + 1] && j + 1 < res && inside[k + res]) {
+          const ti = idxTop[k], bi = idxBot[k];
+          const tj = idxTop[k + res], bj = idxBot[k + res];
+          if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0)
+            indices.push(ti, bi, bj, ti, bj, tj);
+        }
+        if (i > 0 && !inside[k - 1] && j + 1 < res && inside[k + res]) {
+          const ti = idxTop[k], bi = idxBot[k];
+          const tj = idxTop[k + res], bj = idxBot[k + res];
+          if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0)
+            indices.push(ti, bj, bi, ti, tj, bj);
+        }
+        if (j + 1 < res && !inside[k + res] && i + 1 < res && inside[k + 1]) {
+          const ti = idxTop[k], bi = idxBot[k];
+          const tj = idxTop[k + 1], bj = idxBot[k + 1];
+          if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0)
+            indices.push(ti, bj, bi, ti, tj, bj);
+        }
+        if (j > 0 && !inside[k - res] && i + 1 < res && inside[k + 1]) {
+          const ti = idxTop[k], bi = idxBot[k];
+          const tj = idxTop[k + 1], bj = idxBot[k + 1];
+          if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0)
+            indices.push(ti, bi, bj, ti, bj, tj);
+        }
+      }
+    }
+
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    g.setIndex(indices);
+    g.computeVertexNormals();
+    g.center();
+    g.translate(0, 1.5, 0);
+    const mat = new THREE.MeshStandardMaterial({
+      vertexColors: true, roughness: 0.85, metalness: 0.05,
+    });
+    this.mesh = new THREE.Mesh(g, mat);
+    this.scene.add(this.mesh);
+  }
+  animate = () => {
+    requestAnimationFrame(this.animate);
+    if (this.mesh && this.spinning) this.mesh.rotation.y += 0.0035;
+    this.renderer.render(this.scene, this.camera);
+  }
+  start() { this.animate(); }
+}
+
+// STL exporter from a height field (binary)
+function fieldToStlBinary(field, res = RES, radius = RADIUS_MM) {
+  const dx = (2 * radius) / (res - 1);
+  const inside = new Uint8Array(res * res);
+  const tops = new Map();
+  const bots = new Map();
+  let nVerts = 0;
+  function vertKey(arr, idx) {
+    return idx;
+  }
+  // Collect verts (store as [x,y,z] tuples)
+  const verts = [];
+  const idxTop = new Int32Array(res * res).fill(-1);
+  const idxBot = new Int32Array(res * res).fill(-1);
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const k = j * res + i;
+      if (field[k] > 0) {
+        const x = -radius + i * dx;
+        const y = -radius + j * dx;
+        idxTop[k] = verts.length;
+        verts.push([x, y, field[k]]);
+        inside[k] = 1;
+      }
+    }
+  }
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const k = j * res + i;
+      if (inside[k]) {
+        const x = -radius + i * dx;
+        const y = -radius + j * dx;
+        idxBot[k] = verts.length;
+        verts.push([x, y, 0]);
+      }
+    }
+  }
+  const tris = [];
+  // Top
+  for (let j = 0; j < res - 1; j++) {
+    for (let i = 0; i < res - 1; i++) {
+      const a = idxTop[j*res + i], b = idxTop[j*res + i + 1];
+      const c = idxTop[(j+1)*res + i + 1], d = idxTop[(j+1)*res + i];
+      if (a < 0 || b < 0 || c < 0 || d < 0) continue;
+      tris.push([a, b, c]); tris.push([a, c, d]);
+    }
+  }
+  // Bottom
+  for (let j = 0; j < res - 1; j++) {
+    for (let i = 0; i < res - 1; i++) {
+      const a = idxBot[j*res + i], b = idxBot[j*res + i + 1];
+      const c = idxBot[(j+1)*res + i + 1], d = idxBot[(j+1)*res + i];
+      if (a < 0 || b < 0 || c < 0 || d < 0) continue;
+      tris.push([a, c, b]); tris.push([a, d, c]);
+    }
+  }
+  // Sides (simple version)
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const k = j * res + i;
+      if (!inside[k]) continue;
+      if (i + 1 < res && !inside[k+1] && j + 1 < res && inside[k+res]) {
+        const ti = idxTop[k], bi = idxBot[k];
+        const tj = idxTop[k+res], bj = idxBot[k+res];
+        if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0) {
+          tris.push([ti, bi, bj]); tris.push([ti, bj, tj]);
+        }
+      }
+      if (i > 0 && !inside[k-1] && j + 1 < res && inside[k+res]) {
+        const ti = idxTop[k], bi = idxBot[k];
+        const tj = idxTop[k+res], bj = idxBot[k+res];
+        if (ti >= 0 && bi >= 0 && tj >= 0 && bj >= 0) {
+          tris.push([ti, bj, bi]); tris.push([ti, tj, bj]);
+        }
+      }
+    }
+  }
+  // Write STL
+  const buf = new ArrayBuffer(80 + 4 + tris.length * 50);
+  const view = new DataView(buf);
+  view.setUint32(80, tris.length, true);
+  let off = 84;
+  for (const [ai, bi, ci] of tris) {
+    const a = verts[ai], b = verts[bi], c = verts[ci];
+    const ex = b[0] - a[0], ey = b[1] - a[1], ez = b[2] - a[2];
+    const fx = c[0] - a[0], fy = c[1] - a[1], fz = c[2] - a[2];
+    let nx = ey * fz - ez * fy;
+    let ny = ez * fx - ex * fz;
+    let nz = ex * fy - ey * fx;
+    const nl = Math.sqrt(nx*nx + ny*ny + nz*nz) || 1;
+    nx /= nl; ny /= nl; nz /= nl;
+    view.setFloat32(off, nx, true); off += 4;
+    view.setFloat32(off, ny, true); off += 4;
+    view.setFloat32(off, nz, true); off += 4;
+    for (const v of [a, b, c]) {
+      view.setFloat32(off, v[0], true); off += 4;
+      view.setFloat32(off, v[1], true); off += 4;
+      view.setFloat32(off, v[2], true); off += 4;
+    }
+    view.setUint16(off, 0, true); off += 2;
+  }
+  return buf;
+}
+
+function downloadBlob(buf, filename) {
+  const blob = new Blob([buf], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+function $(id) { return document.getElementById(id); }
+function parseId(s) {
+  const t = (s || '').trim();
+  if (!t) return 0;
+  return (t.toLowerCase().startsWith('0x') ? parseInt(t, 16) : parseInt(t)) >>> 0;
+}
+function fmtId(id) { return '0x' + (id >>> 0).toString(16).toUpperCase().padStart(8, '0'); }
+function fmtRs(rs) { return Array.from(rs).map(b => b.toString(16).padStart(2, '0')).join(''); }
+function showStatus(msg, ms = 1800) {
+  const el = $('status-line');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showStatus._t);
+  showStatus._t = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+// ============================================================================
+// PANEL: PARAMETRIC
+// ============================================================================
+let parametricTile, parametricChannels = null, parametricWear = 0;
+function initParametric() {
+  parametricTile = new Tile3D($('canvas-3d-parametric'));
+  parametricTile.start();
+  refreshParametric(parseId($('id-input').value));
+
+  $('btn-encode').addEventListener('click', () => {
+    const id = parseId($('id-input').value);
+    $('id-input').value = fmtId(id);
+    refreshParametric(id);
+  });
+  $('btn-random').addEventListener('click', () => {
+    const id = (Math.random() * 0x100000000) >>> 0;
+    $('id-input').value = fmtId(id);
+    refreshParametric(id);
+  });
+  $('id-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') $('btn-encode').click();
+  });
+  $('btn-stl').addEventListener('click', () => {
+    if (!parametricChannels) return;
+    const field = buildHeightField(parametricChannels, 0);
+    const buf = fieldToStlBinary(field);
+    const id = parseId($('id-input').value);
+    downloadBlob(buf, `pattern_${fmtId(id).slice(2)}.stl`);
+    showStatus('STL downloaded');
+  });
+  $('wear-slider').addEventListener('input', e => {
+    parametricWear = +e.target.value / 100;
+    const stages = [
+      [0.05, 'brand new'], [0.20, 'lightly worn'],
+      [0.40, 'a season in'], [0.60, 'a year in'],
+      [0.80, 'vintage'], [1.01, 'archive'],
+    ];
+    let lbl = 'archive';
+    for (const [t, l] of stages) if (parametricWear < t) { lbl = l; break; }
+    $('wear-pct').textContent = lbl;
+    if (parametricChannels) {
+      parametricTile.setField(buildHeightField(parametricChannels, parametricWear));
+    }
+  });
+}
+
+function refreshParametric(itemId) {
+  const ch = encodeId(itemId);
+  parametricChannels = ch;
+  const family = MACRO_FAMILIES[ch.macro];
+  const protrusions = 3 + (ch.count % 16);
+  const heightMm = (1.5 + (ch.height / 255) * 6.5).toFixed(2);
+  const angleDeg = ((ch.angles >> 4) / 16 * 360).toFixed(0);
+
+  $('ch-macro').innerHTML  = `${ch.macro} <span class="unit">${family}</span>`;
+  $('ch-count').innerHTML  = `${ch.count} <span class="unit">${protrusions} protrusions</span>`;
+  $('ch-height').innerHTML = `${ch.height} <span class="unit">${heightMm} mm</span>`;
+  $('ch-angles').innerHTML = `${ch.angles} <span class="unit">${angleDeg}° base</span>`;
+  $('ch-micro').innerHTML  = `${ch.micro} <span class="unit">texture seed</span>`;
+  $('ch-rs').textContent   = fmtRs(ch.rs);
+
+  $('meta-id').textContent = fmtId(itemId);
+  $('meta-family').textContent = family;
+  $('meta-protrusions').textContent = `${protrusions}-fold symmetry`;
+
+  parametricTile.setField(buildHeightField(ch, parametricWear));
+
+  // Sync into order panel
+  $('order-step-1-meta').textContent = `Ready · ${fmtId(itemId)}`;
+}
+
+// ============================================================================
+// PANEL: DRAW
+// ============================================================================
+let drawCanvas, drawCtx, drawing = false, drawTile, drawChannels = null;
+let drawStrokes = []; // array of arrays of {x, y, w}
+let currentStroke = null;
+let drawStrokeWidth = 14;
+
+function initDraw() {
+  drawCanvas = $('draw-canvas');
+  drawCtx = drawCanvas.getContext('2d');
+  clearDrawCanvas();
+
+  const getXY = (e) => {
+    const r = drawCanvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {
+      x: ((t.clientX - r.left) / r.width) * drawCanvas.width,
+      y: ((t.clientY - r.top) / r.height) * drawCanvas.height,
+    };
+  };
+
+  const start = (e) => {
+    e.preventDefault();
+    drawing = true;
+    currentStroke = [];
+    const p = getXY(e);
+    currentStroke.push({ ...p, w: drawStrokeWidth });
+  };
+  const move = (e) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getXY(e);
+    currentStroke.push({ ...p, w: drawStrokeWidth });
+    redrawDraw();
+  };
+  const end = () => {
+    if (!drawing) return;
+    drawing = false;
+    if (currentStroke && currentStroke.length > 1) drawStrokes.push(currentStroke);
+    currentStroke = null;
+  };
+
+  drawCanvas.addEventListener('mousedown', start);
+  drawCanvas.addEventListener('mousemove', move);
+  drawCanvas.addEventListener('mouseup', end);
+  drawCanvas.addEventListener('mouseleave', end);
+  drawCanvas.addEventListener('touchstart', start, { passive: false });
+  drawCanvas.addEventListener('touchmove', move, { passive: false });
+  drawCanvas.addEventListener('touchend', end);
+
+  $('stroke-slider').addEventListener('input', e => drawStrokeWidth = +e.target.value);
+
+  $('btn-draw-clear').addEventListener('click', () => {
+    drawStrokes = [];
+    clearDrawCanvas();
+    $('draw-channels').style.display = 'none';
+    $('draw-3d-wrap').style.display = 'none';
+    $('btn-draw-stl').disabled = true;
+  });
+
+  $('btn-draw-encode').addEventListener('click', () => {
+    if (drawStrokes.length === 0) {
+      showStatus('Draw something first');
+      return;
+    }
+    embedDrawingKey();
+  });
+
+  $('btn-draw-stl').addEventListener('click', () => {
+    if (!drawChannels || !drawChannels._field) return;
+    const buf = fieldToStlBinary(drawChannels._field);
+    const id = parseId($('draw-id-input').value);
+    downloadBlob(buf, `pattern_drawn_${fmtId(id).slice(2)}.stl`);
+    showStatus('STL downloaded');
+  });
+}
+
+function clearDrawCanvas() {
+  drawCtx.fillStyle = '#f4ede0';
+  drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+  // Subtle disc indicator
+  drawCtx.strokeStyle = 'rgba(196, 184, 158, 0.6)';
+  drawCtx.lineWidth = 1;
+  drawCtx.beginPath();
+  drawCtx.arc(drawCanvas.width / 2, drawCanvas.height / 2, drawCanvas.width * 0.45, 0, 2 * Math.PI);
+  drawCtx.stroke();
+}
+
+function redrawDraw() {
+  clearDrawCanvas();
+  drawCtx.strokeStyle = '#15110b';
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  const all = currentStroke ? drawStrokes.concat([currentStroke]) : drawStrokes;
+  for (const stroke of all) {
+    drawCtx.beginPath();
+    for (let i = 0; i < stroke.length; i++) {
+      const p = stroke[i];
+      drawCtx.lineWidth = p.w;
+      if (i === 0) drawCtx.moveTo(p.x, p.y);
+      else drawCtx.lineTo(p.x, p.y);
+    }
+    drawCtx.stroke();
+  }
+}
+
+function embedDrawingKey() {
+  const id = parseId($('draw-id-input').value);
+  $('draw-id-input').value = fmtId(id);
+  const ch = encodeId(id);
+
+  // Convert canvas drawing to a height field. The drawing IS the silhouette.
+  // We add 32 boundary RS markers and modulate the stroke height.
+  const res = RES;
+  const radius = RADIUS_MM;
+  const field = new Float32Array(res * res);
+
+  // Read drawing as alpha mask, downsample to res×res
+  // Get pixel data from canvas
+  const img = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+  const sw = drawCanvas.width, sh = drawCanvas.height;
+
+  // For each grid cell, compute coverage and stroke darkness
+  const dx = (2 * radius) / (res - 1);
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const x = -radius + i * dx;
+      const y = -radius + j * dx;
+      const r = Math.sqrt(x * x + y * y);
+      if (r > radius) continue;
+
+      // Map to source canvas
+      const sx = Math.floor((x + radius) / (2 * radius) * sw);
+      const sy = Math.floor((y + radius) / (2 * radius) * sh);
+      const sIdx = (sy * sw + sx) * 4;
+      const lum = (img.data[sIdx] + img.data[sIdx + 1] + img.data[sIdx + 2]) / 3;
+      // Dark pixels = drawn = high relief
+      const drawnIntensity = 1 - lum / 255;
+      field[j * res + i] = BASE_MM + drawnIntensity * 4.5; // up to 4.5mm relief
+
+      // Subtle modulation by macro signature so the codec can read it
+      const theta = Math.atan2(y, x);
+      const rNorm = r / radius;
+      const sig = MACRO_SIGS[ch.macro % 16];
+      const [primary, secondary, phase, mode] = sig;
+      let m = 0;
+      if (mode === 1) {
+        const radial = 1 - rNorm;
+        m = 0.4 * Math.cos(primary * theta) * radial;
+        if (secondary > 0) m += 0.35 * Math.cos(secondary * theta + phase * Math.PI) * radial;
+      } else if (mode === 0) {
+        m = 0.4 * Math.cos(primary * theta + 6 * rNorm);
+      } else {
+        m = 0.4 * Math.cos(primary * theta - 8 * rNorm);
+      }
+      // Apply where drawing exists, scaled down
+      if (drawnIntensity > 0.1) {
+        field[j * res + i] += m * 0.5 * drawnIntensity;
+      }
+    }
+  }
+
+  // Add 32 RS boundary markers (always present, not gated by drawing)
+  const rsBits = new Array(32);
+  for (let b = 0; b < 4; b++) {
+    for (let i = 0; i < 8; i++) rsBits[b * 8 + i] = (ch.rs[b] >> (7 - i)) & 1;
+  }
+  const rsSigma = radius / 24;
+  const rsSig2 = 2 * rsSigma * rsSigma;
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const x = -radius + i * dx;
+      const y = -radius + j * dx;
+      const r = Math.sqrt(x * x + y * y);
+      if (r > radius) continue;
+      let acc = 0;
+      for (let k = 0; k < 32; k++) {
+        const a = (k / 32) * 2 * Math.PI;
+        const cx = 0.92 * radius * Math.cos(a);
+        const cy = 0.92 * radius * Math.sin(a);
+        const d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        if (d2 < (3.5 * rsSigma) * (3.5 * rsSigma)) {
+          const lvl = rsBits[k] ? 3.0 : 1.0;
+          acc += lvl * Math.exp(-d2 / rsSig2);
+        }
+      }
+      field[j * res + i] += acc;
+      field[j * res + i] = Math.max(field[j * res + i], BASE_MM);
+    }
+  }
+
+  drawChannels = ch;
+  drawChannels._field = field;
+
+  // Show 3D preview
+  $('draw-3d-wrap').style.display = 'block';
+  if (!drawTile) {
+    drawTile = new Tile3D($('canvas-3d-draw'));
+    drawTile.start();
+  }
+  setTimeout(() => drawTile.setField(field), 50);
+
+  // Show channel info
+  $('draw-channels').style.display = 'block';
+  $('dr-complexity').textContent = `${drawStrokes.reduce((s, st) => s + st.length, 0)} points · ${drawStrokes.length} strokes`;
+  $('dr-mod').textContent = `macro=${ch.macro} (${MACRO_FAMILIES[ch.macro]})`;
+  $('dr-markers').textContent = `32 boundary · RS=${fmtRs(ch.rs)}`;
+  $('btn-draw-stl').disabled = false;
+
+  showStatus('Key embedded into drawing');
+}
+
+// ============================================================================
+// PANEL: PHOTO
+// ============================================================================
+let photoImage = null, photoTile, photoChannels = null;
+function initPhoto() {
+  const drop = $('photo-drop');
+  const input = $('photo-input');
+  drop.addEventListener('click', () => input.click());
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) loadPhoto(e.dataTransfer.files[0]);
+  });
+  input.addEventListener('change', e => {
+    if (e.target.files[0]) loadPhoto(e.target.files[0]);
+  });
+  $('btn-photo-replace').addEventListener('click', () => input.click());
+  $('btn-photo-encode').addEventListener('click', encodePhoto);
+  $('btn-photo-stl').addEventListener('click', () => {
+    if (!photoChannels || !photoChannels._field) return;
+    const buf = fieldToStlBinary(photoChannels._field);
+    const id = parseId($('photo-id-input').value);
+    downloadBlob(buf, `pattern_photo_${fmtId(id).slice(2)}.stl`);
+    showStatus('STL downloaded');
+  });
+  $('depth-slider').addEventListener('input', () => { if (photoImage) encodePhoto(); });
+  $('detail-slider').addEventListener('input', () => { if (photoImage) encodePhoto(); });
+}
+
+function loadPhoto(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      photoImage = img;
+      const drop = $('photo-drop');
+      drop.classList.add('has-image');
+      drop.innerHTML = '';
+      drop.appendChild(img);
+      $('btn-photo-encode').disabled = false;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function encodePhoto() {
+  if (!photoImage) return;
+  const id = parseId($('photo-id-input').value);
+  $('photo-id-input').value = fmtId(id);
+  const ch = encodeId(id);
+
+  const depth = +$('depth-slider').value / 100;        // 0.2..1.0
+  const detail = +$('detail-slider').value / 100;      // 0..1
+
+  // Sample the image to a height field
+  const tmp = document.createElement('canvas');
+  tmp.width = RES; tmp.height = RES;
+  const tctx = tmp.getContext('2d');
+  // Cover-fit
+  const img = photoImage;
+  const ar = img.width / img.height;
+  let dw, dh, dx0, dy0;
+  if (ar > 1) {
+    dh = RES; dw = RES * ar;
+    dx0 = -(dw - RES) / 2; dy0 = 0;
+  } else {
+    dw = RES; dh = RES / ar;
+    dx0 = 0; dy0 = -(dh - RES) / 2;
+  }
+  tctx.fillStyle = '#000';
+  tctx.fillRect(0, 0, RES, RES);
+  tctx.drawImage(img, dx0, dy0, dw, dh);
+  const data = tctx.getImageData(0, 0, RES, RES).data;
+
+  const radius = RADIUS_MM;
+  const dx = (2 * radius) / (RES - 1);
+  const field = new Float32Array(RES * RES);
+
+  // Photo height = brightness * depth
+  for (let j = 0; j < RES; j++) {
+    for (let i = 0; i < RES; i++) {
+      const x = -radius + i * dx;
+      const y = -radius + j * dx;
+      const r = Math.sqrt(x * x + y * y);
+      if (r > radius) continue;
+      const k = j * RES + i;
+      const px = (j * RES + i) * 4;
+      const lum = (data[px] + data[px + 1] + data[px + 2]) / (3 * 255);
+      // Edge enhancement based on detail
+      let edge = 0;
+      if (i > 0 && i < RES - 1 && j > 0 && j < RES - 1) {
+        const px2 = ((j) * RES + i - 1) * 4;
+        const px3 = ((j) * RES + i + 1) * 4;
+        const lLeft = (data[px2] + data[px2+1] + data[px2+2]) / (3*255);
+        const lRight = (data[px3] + data[px3+1] + data[px3+2]) / (3*255);
+        edge = Math.abs(lRight - lLeft);
+      }
+      const reliefH = lum * depth * 5 + edge * detail * 3;
+      field[k] = BASE_MM + reliefH;
+    }
+  }
+
+  // Add the 32 RS markers (so the codec can read the key back)
+  const rsBits = new Array(32);
+  for (let b = 0; b < 4; b++) {
+    for (let i = 0; i < 8; i++) rsBits[b * 8 + i] = (ch.rs[b] >> (7 - i)) & 1;
+  }
+  const rsSigma = radius / 24;
+  const rsSig2 = 2 * rsSigma * rsSigma;
+  for (let j = 0; j < RES; j++) {
+    for (let i = 0; i < RES; i++) {
+      const x = -radius + i * dx;
+      const y = -radius + j * dx;
+      const r = Math.sqrt(x * x + y * y);
+      if (r > radius) continue;
+      let acc = 0;
+      for (let k = 0; k < 32; k++) {
+        const a = (k / 32) * 2 * Math.PI;
+        const cx = 0.92 * radius * Math.cos(a);
+        const cy = 0.92 * radius * Math.sin(a);
+        const d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        if (d2 < (3.5 * rsSigma) * (3.5 * rsSigma)) {
+          const lvl = rsBits[k] ? 3.0 : 1.0;
+          acc += lvl * Math.exp(-d2 / rsSig2);
+        }
+      }
+      field[j * RES + i] += acc;
+      field[j * RES + i] = Math.max(field[j * RES + i], BASE_MM);
+    }
+  }
+
+  // Subtle macro modulation in the inner band
+  const sig = MACRO_SIGS[ch.macro % 16];
+  for (let j = 0; j < RES; j++) {
+    for (let i = 0; i < RES; i++) {
+      const x = -radius + i * dx;
+      const y = -radius + j * dx;
+      const r = Math.sqrt(x * x + y * y);
+      if (r > radius || r < 0.2 * radius || r > 0.5 * radius) continue;
+      const theta = Math.atan2(y, x);
+      const rNorm = r / radius;
+      const [primary, secondary, phase, mode] = sig;
+      let m = 0;
+      if (mode === 1) {
+        const radial = 1 - rNorm;
+        m = 0.4 * Math.cos(primary * theta) * radial;
+        if (secondary > 0) m += 0.35 * Math.cos(secondary * theta + phase * Math.PI) * radial;
+      } else if (mode === 0) {
+        m = 0.4 * Math.cos(primary * theta + 6 * rNorm);
+      } else {
+        m = 0.4 * Math.cos(primary * theta - 8 * rNorm);
+      }
+      field[j * RES + i] += m * 0.5;
+    }
+  }
+
+  photoChannels = ch;
+  photoChannels._field = field;
+
+  $('photo-3d-wrap').style.display = 'block';
+  if (!photoTile) {
+    photoTile = new Tile3D($('canvas-3d-photo'));
+    photoTile.start();
+  }
+  setTimeout(() => photoTile.setField(field), 50);
+  $('btn-photo-stl').disabled = false;
+  showStatus('Photo encoded');
+}
+
+// ============================================================================
+// PANEL: SCAN — the actual decode demo
+// ============================================================================
+function initScan() {
+  $('btn-scan-current').addEventListener('click', scanCurrentPreview);
+  $('btn-scan-camera').addEventListener('click', scanFromCamera);
+  $('btn-scan-upload').addEventListener('click', () => $('scan-file').click());
+  $('scan-file').addEventListener('change', e => {
+    if (e.target.files[0]) scanFromFile(e.target.files[0]);
+  });
+}
+
+function scanCurrentPreview() {
+  // Find which panel has rendered geometry — prefer motif (most user-visible),
+  // then parametric, then draw, then photo
+  let field = null, sourceLabel = '';
+  if (currentMotifChannels && currentMotifId) {
+    field = buildHeightField(currentMotifChannels, 0);
+    bakeMotifEngraving(field, currentMotifId, RES, RADIUS_MM, currentMotifChannels);
+    sourceLabel = `Motif: ${MOTIFS.find(m => m.id === currentMotifId).name}`;
+  } else if (parametricChannels) {
+    field = buildHeightField(parametricChannels, parametricWear);
+    sourceLabel = 'Parametric preview';
+  } else if (drawChannels && drawChannels._field) {
+    field = drawChannels._field;
+    sourceLabel = 'Hand-drawn';
+  } else if (photoChannels && photoChannels._field) {
+    field = photoChannels._field;
+    sourceLabel = 'Photo';
+  }
+  if (!field) {
+    showStatus('Generate a pattern first');
+    return;
+  }
+
+  showScanSource(field);
+  showStatus(`Reading ${sourceLabel}…`);
+  $('scan-reticle').style.display = 'block';
+  $('scan-reticle').classList.add('scanning');
+  setTimeout(() => {
+    $('scan-reticle').classList.remove('scanning');
+    runDecode(field);
+  }, 1300);
+}
+
+function showScanSource(field) {
+  $('scan-empty').style.display = 'none';
+  const canvas = $('scan-canvas');
+  canvas.style.display = 'block';
+  canvas.width = 400; canvas.height = 400;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(400, 400);
+  // Render the field as grayscale relief (darker = lower)
+  let maxH = 0;
+  for (let i = 0; i < field.length; i++) if (field[i] > maxH) maxH = field[i];
+  for (let j = 0; j < 400; j++) {
+    for (let i = 0; i < 400; i++) {
+      const fi = Math.floor(i / 400 * RES);
+      const fj = Math.floor(j / 400 * RES);
+      const h = field[fj * RES + fi];
+      const intensity = h > 0 ? Math.floor(80 + (h / maxH) * 160) : 240;
+      const idx = (j * 400 + i) * 4;
+      // Warm paper tone for missing, ink for relief
+      if (h > 0) {
+        img.data[idx]     = 60 + intensity * 0.7;
+        img.data[idx + 1] = 50 + intensity * 0.65;
+        img.data[idx + 2] = 35 + intensity * 0.55;
+      } else {
+        img.data[idx]     = 244;
+        img.data[idx + 1] = 237;
+        img.data[idx + 2] = 224;
+      }
+      img.data[idx + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+async function scanFromCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' } },
+    });
+    const video = $('scan-video');
+    $('scan-empty').style.display = 'none';
+    $('scan-canvas').style.display = 'none';
+    video.style.display = 'block';
+    video.srcObject = stream;
+    await video.play();
+    showStatus('Camera live · capturing in 2s…');
+    $('scan-reticle').style.display = 'block';
+    $('scan-reticle').classList.add('scanning');
+    setTimeout(() => {
+      // Capture frame
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      stream.getTracks().forEach(t => t.stop());
+      video.style.display = 'none';
+      $('scan-canvas').style.display = 'block';
+      const dctx = $('scan-canvas').getContext('2d');
+      $('scan-canvas').width = 400; $('scan-canvas').height = 400;
+      dctx.drawImage(canvas, 0, 0, 400, 400);
+      $('scan-reticle').classList.remove('scanning');
+
+      // For real camera: this would run YOLOv8-seg → MiDaS depth → channel extractor.
+      // We don't have those models in-browser; show honest message.
+      showCameraScanResult();
+    }, 2000);
+  } catch (err) {
+    showStatus('Camera unavailable');
+    showCameraScanResult();
+  }
+}
+
+function showCameraScanResult() {
+  const html = `
+    <div class="result-confidence" style="color: var(--warn);">
+      <div class="dot"></div>
+      <span>Camera capture · pipeline pending</span>
+    </div>
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.5; color: var(--ink-soft);">
+      Real-camera decode requires on-device segmentation (YOLOv8-seg) and depth estimation (MiDaS or LiDAR), which run on the phone — not in this browser demo.
+    </p>
+    <p style="font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.55; color: var(--ink-soft); margin-top: 12px;">
+      The full pipeline (segmentation → depth → channel extraction → Reed-Solomon) is implemented in <code style="font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--paper-dark); padding: 1px 6px;">perception/perception.py</code> (Python) and ports to a phone via the Flutter scanner skeleton.
+    </p>
+    <p style="font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.55; color: var(--ink); margin-top: 16px;">
+      To see the decode work end-to-end <em>in this browser</em>, press <strong>"Scan current preview"</strong> — the algorithm reads the rendered tile from any of the three generators above.
+    </p>`;
+  $('scan-result').innerHTML = html;
+}
+
+function scanFromFile(file) {
+  // Treat uploaded image as a depth map (luminance = height)
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const tmp = document.createElement('canvas');
+      tmp.width = RES; tmp.height = RES;
+      const tctx = tmp.getContext('2d');
+      tctx.fillStyle = '#000'; tctx.fillRect(0, 0, RES, RES);
+      // Cover-fit
+      const ar = img.width / img.height;
+      let dw, dh, dx0, dy0;
+      if (ar > 1) { dh = RES; dw = RES * ar; dx0 = -(dw - RES) / 2; dy0 = 0; }
+      else { dw = RES; dh = RES / ar; dx0 = 0; dy0 = -(dh - RES) / 2; }
+      tctx.drawImage(img, dx0, dy0, dw, dh);
+      const data = tctx.getImageData(0, 0, RES, RES).data;
+      const field = new Float32Array(RES * RES);
+      const radius = RADIUS_MM;
+      const dx = (2 * radius) / (RES - 1);
+      for (let j = 0; j < RES; j++) {
+        for (let i = 0; i < RES; i++) {
+          const x = -radius + i * dx;
+          const y = -radius + j * dx;
+          const r = Math.sqrt(x*x + y*y);
+          if (r > radius) continue;
+          const px = (j * RES + i) * 4;
+          const lum = (data[px] + data[px+1] + data[px+2]) / (3 * 255);
+          field[j * RES + i] = BASE_MM + lum * 7;
+        }
+      }
+      showScanSource(field);
+      showStatus('Decoding uploaded depth map…');
+      $('scan-reticle').style.display = 'block';
+      $('scan-reticle').classList.add('scanning');
+      setTimeout(() => {
+        $('scan-reticle').classList.remove('scanning');
+        runDecode(field);
+      }, 1100);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function runDecode(field) {
+  const extracted = extractChannels(field);
+  const decode = decodeChannels(extracted);
+  renderResult(decode, extracted);
+}
+
+function renderResult(decoded, extracted) {
+  const out = $('scan-result');
+  let confColor, confLabel, confPct;
+  switch (decoded.level) {
+    case 'full':
+      confColor = 'var(--good)';
+      confLabel = 'Full ID · clean read';
+      confPct = `${(decoded.confidence * 100).toFixed(0)}%`;
+      break;
+    case 'rs_corrected':
+      confColor = 'var(--accent)';
+      confLabel = 'RS-corrected';
+      confPct = `${(decoded.confidence * 100).toFixed(0)}%`;
+      break;
+    case 'category_only':
+      confColor = 'var(--warn)';
+      confLabel = 'Category-only · heavily worn';
+      confPct = '33%';
+      break;
+    default:
+      confColor = 'var(--bad)';
+      confLabel = 'Lost · unreadable';
+      confPct = '—';
+  }
+
+  let idStr = decoded.itemId != null ? fmtId(decoded.itemId) : 'Item not in archive';
+  const macroFamily = decoded.itemId != null
+    ? MACRO_FAMILIES[((decoded.itemId >>> 28) & 0x0F)]
+    : (extracted.macro != null ? MACRO_FAMILIES[extracted.macro] : '—');
+  const protrusions = decoded.itemId != null
+    ? 3 + (((decoded.itemId >>> 24) & 0x0F) % 16)
+    : (extracted.count != null ? 3 + extracted.count : '—');
+
+  // Provenance — only meaningful if we have a known archive ID
+  const provenanceShown = decoded.itemId === 0x2DCA3791 || decoded.level !== 'lost';
+  const provenance = decoded.itemId != null ? `
+    <div class="result-provenance">
+      <div class="row"><div class="lbl">Maker</div><div class="val">Atelier No. 03 / Lviv</div></div>
+      <div class="row"><div class="lbl">Collection</div><div class="val">Spring · MMXXVI</div></div>
+      <div class="row"><div class="lbl">Garment</div><div class="val">${describeGarment(decoded.itemId)}</div></div>
+      <div class="row"><div class="lbl">Material</div><div class="val">${describeMaterial(decoded.itemId)}</div></div>
+      <div class="row"><div class="lbl">Care</div><div class="val">Cool wash, line dry</div></div>
+    </div>` : '';
+
+  // Channel match indicators
+  const expCh = decoded.itemId != null ? encodeId(decoded.itemId) : null;
+  const matches = (a, b) => a != null && b != null && a === b ? 'match' : (a == null ? 'lost' : '');
+  const rsMatch = (a, b) => {
+    if (!a || !b) return a == null ? 'lost' : '';
+    if (a.length !== b.length) return '';
+    for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return '';
+    return 'match';
+  };
+
+  const chRow = expCh ? `
+    <div class="result-channels">
+      <div class="rch ${matches(extracted.macro, expCh.macro)}"><div class="rch-name">macro</div><div class="rch-val">${extracted.macro != null ? extracted.macro : '—'}</div></div>
+      <div class="rch ${matches(extracted.count, expCh.count)}"><div class="rch-name">count</div><div class="rch-val">${extracted.count != null ? extracted.count : '—'}</div></div>
+      <div class="rch ${matches(extracted.height, expCh.height) || ''}"><div class="rch-name">height</div><div class="rch-val">${extracted.height != null ? extracted.height : '—'}</div></div>
+      <div class="rch ${matches(extracted.angles, expCh.angles)}"><div class="rch-name">angles</div><div class="rch-val">${extracted.angles != null ? extracted.angles : '—'}</div></div>
+      <div class="rch lost"><div class="rch-name">micro</div><div class="rch-val">recovered</div></div>
+      <div class="rch ${rsMatch(extracted.rs, expCh.rs)}"><div class="rch-name">rs</div><div class="rch-val" style="font-size:10px;">${extracted.rs ? fmtRs(extracted.rs) : '—'}</div></div>
+    </div>` : `
+    <div class="result-channels">
+      <div class="rch"><div class="rch-name">macro</div><div class="rch-val">${extracted.macro != null ? extracted.macro : '—'}</div></div>
+      <div class="rch"><div class="rch-name">count</div><div class="rch-val">${extracted.count != null ? extracted.count : '—'}</div></div>
+      <div class="rch"><div class="rch-name">height</div><div class="rch-val">${extracted.height != null ? extracted.height : '—'}</div></div>
+      <div class="rch"><div class="rch-name">angles</div><div class="rch-val">${extracted.angles != null ? extracted.angles : '—'}</div></div>
+      <div class="rch"><div class="rch-name">micro</div><div class="rch-val">—</div></div>
+      <div class="rch"><div class="rch-name">rs</div><div class="rch-val" style="font-size:10px;">${extracted.rs ? fmtRs(extracted.rs) : '—'}</div></div>
+    </div>`;
+
+  out.innerHTML = `
+    <div class="result-confidence" style="color: ${confColor};">
+      <div class="dot"></div>
+      <span>${confLabel}</span>
+      <span style="margin-left: 6px;">${confPct}</span>
+    </div>
+    <div class="result-id">${idStr}</div>
+    <div class="result-meta">
+      ${macroFamily.toUpperCase()}<span class="sep">·</span><span class="neutral">${protrusions}-fold symmetry</span>
+    </div>
+    ${provenance}
+    <span class="label" style="margin-top: 12px;">Channel readout</span>
+    ${chRow}`;
+  showStatus(decoded.itemId != null ? `Decoded ${fmtId(decoded.itemId)}` : 'Pattern unreadable');
+}
+
+function describeGarment(id) {
+  const garments = [
+    'Linen pleated overcoat', 'Silk evening shirt', 'Wool draped jacket',
+    'Cotton sailing trousers', 'Cashmere oversized scarf', 'Hemp work apron',
+    'Velvet opera cape', 'Linen wrap dress',
+  ];
+  return garments[id % garments.length];
+}
+function describeMaterial(id) {
+  const materials = [
+    '70% linen · 30% silk', '100% silk crepe', '80% wool · 20% alpaca',
+    '100% organic cotton', 'Mongolian cashmere', '100% Hungarian hemp',
+    'Italian silk velvet', 'French linen',
+  ];
+  return materials[id % materials.length];
+}
+
+// ============================================================================
+// PANEL: ORDER
+// ============================================================================
+let orderStep = 1;
+function initOrder() {
+  $('btn-order-advance').addEventListener('click', advanceOrder);
+  $('btn-order-reset').addEventListener('click', resetOrder);
+  updateOrderUI();
+}
+function advanceOrder() {
+  if (orderStep >= 4) {
+    showStatus('Pattern activated · provenance live');
+    return;
+  }
+  orderStep++;
+  updateOrderUI();
+}
+function resetOrder() {
+  orderStep = 1;
+  $('order-step-2-meta').textContent = 'Awaiting';
+  $('order-step-3-meta').textContent = 'Awaiting';
+  $('order-step-4-meta').textContent = 'Awaiting';
+  updateOrderUI();
+}
+function updateOrderUI() {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.querySelector(`.order-step[data-step="${i}"]`);
+    el.classList.remove('current', 'done');
+    if (i < orderStep) el.classList.add('done');
+    else if (i === orderStep) el.classList.add('current');
+  }
+  const id = parseId($('id-input').value);
+  const narratives = [
+    '',
+    'An identifier has been minted. When you\'re ready, generate the STL, send it to the print service, and stitch the resulting tile to your garment.',
+    `STL ready for ${fmtId(id)}. The atelier dispatches the file to the PolyJet print service — Elastico™ UV photopolymer. ~600 KB, ~0.9 g of material per tile.`,
+    'Your tile is in transit. PolyJet Elastico™ prints finish in 2–3 h; postage adds 2–4 days. Inspect it under a raking light — the relief should read as a sharp constellation of bumps.',
+    'Stitch the tile to a discreet seam. Open the scanner, point at the tile. The first successful read activates the registry entry — and from then on, the pattern is the provenance.',
+  ];
+  $('order-narrative').textContent = narratives[orderStep];
+
+  if (orderStep >= 2) {
+    $('order-step-2-meta').textContent = `STL · ${fmtId(id)} · ~600 KB`;
+  }
+  if (orderStep >= 3) {
+    $('order-step-3-meta').textContent = 'Dispatched · 3-5 day lead';
+  }
+  if (orderStep === 4) {
+    $('order-step-4-meta').textContent = 'Ready to scan';
+  }
+}
+
+// ============================================================================
+// PALETTES — curated colour combinations.
+// Each palette is "body / accent / bumps / side". Colours are 0..1 RGB triples.
+// hex is for the swatch UI in the picker.
+// ============================================================================
+const PALETTES = [
+  {
+    id: 'editorial',
+    name: 'Editorial',
+    blurb: 'Cream paper, ink, burnt sienna — the atelier\'s house style.',
+    swatches: ['#f4ede0', '#15110b', '#b8472b'],
+    body:   [0.957, 0.929, 0.878],
+    accent: [0.082, 0.067, 0.043],
+    bumps:  [0.722, 0.278, 0.169],
+    side:   [0.847, 0.808, 0.745],
+  },
+  {
+    id: 'vintage_brass',
+    name: 'Vintage brass',
+    blurb: 'Warm brass with a deep walnut groove — the look of an old key.',
+    swatches: ['#d4a574', '#3a2818', '#7a5530'],
+    body:   [0.831, 0.647, 0.455],
+    accent: [0.227, 0.157, 0.094],
+    bumps:  [0.518, 0.345, 0.157],
+    side:   [0.612, 0.471, 0.314],
+  },
+  {
+    id: 'porcelain',
+    name: 'Porcelain & cobalt',
+    blurb: 'Bone-white field, deep cobalt engraving — like blue-and-white china.',
+    swatches: ['#f5f0e8', '#1a3a6b', '#7a8fa8'],
+    body:   [0.961, 0.941, 0.910],
+    accent: [0.102, 0.227, 0.420],
+    bumps:  [0.478, 0.561, 0.659],
+    side:   [0.851, 0.831, 0.800],
+  },
+  {
+    id: 'oxblood',
+    name: 'Oxblood',
+    blurb: 'Deep red leather with cream stitching — saddle, library, Florence.',
+    swatches: ['#5e1d1d', '#f0e3c8', '#a04030'],
+    body:   [0.369, 0.114, 0.114],
+    accent: [0.941, 0.890, 0.784],
+    bumps:  [0.627, 0.251, 0.188],
+    side:   [0.282, 0.078, 0.078],
+  },
+  {
+    id: 'celadon',
+    name: 'Celadon & rust',
+    blurb: 'Sage-green stone with rust contours — Song dynasty in your pocket.',
+    swatches: ['#a8b5a0', '#7a3820', '#d4b878'],
+    body:   [0.659, 0.710, 0.627],
+    accent: [0.478, 0.220, 0.125],
+    bumps:  [0.831, 0.722, 0.471],
+    side:   [0.557, 0.608, 0.529],
+  },
+  {
+    id: 'ivory_gold',
+    name: 'Ivory & gold',
+    blurb: 'Pale ivory with gold leaf relief — bridal, ceremonial, quietly opulent.',
+    swatches: ['#f0e8d4', '#7d6a3a', '#c4a358'],
+    body:   [0.941, 0.910, 0.831],
+    accent: [0.490, 0.416, 0.227],
+    bumps:  [0.769, 0.639, 0.345],
+    side:   [0.831, 0.800, 0.722],
+  },
+  {
+    id: 'midnight',
+    name: 'Midnight',
+    blurb: 'Black tile with silver lining — formalwear, tuxedo, the discreet kind.',
+    swatches: ['#1a1820', '#c4c4c8', '#5a5868'],
+    body:   [0.102, 0.094, 0.125],
+    accent: [0.769, 0.769, 0.784],
+    bumps:  [0.353, 0.345, 0.408],
+    side:   [0.067, 0.063, 0.082],
+  },
+  {
+    id: 'verdigris',
+    name: 'Verdigris',
+    blurb: 'Aged copper-green with bronze underneath — found buried in a garden.',
+    swatches: ['#7ca598', '#3a2818', '#b8895a'],
+    body:   [0.486, 0.647, 0.596],
+    accent: [0.227, 0.157, 0.094],
+    bumps:  [0.722, 0.537, 0.353],
+    side:   [0.412, 0.557, 0.514],
+  },
+];
+
+
+// Each motif has:
+//  - id: short key
+//  - name: display name
+//  - blurb: editorial one-liner
+//  - tag: short technical descriptor for the picker
+//  - svg: function(strokeColor, strokeWidth) → string of inner SVG paths
+//  - engrave: function(x, y, R) → distance in mm to the nearest motif curve.
+//             Used to bake -0.3mm engraving into the height field where d < 0.4mm.
+// All motifs are designed to fit a circle of radius R (15mm), with the
+// decorative engraving inside r < 0.85R so it doesn't collide with RS markers.
+// ============================================================================
+const MOTIFS = [
+  {
+    id: 'rose',
+    name: 'Rose',
+    blurb: 'A three-fold rose curve, an old emblem of return and renewal.',
+    tag: 'rosa · trifolia',
+    svg: (c, w) => {
+      // r = 0.65 * cos(3θ), parametric polar curve in viewBox 100x100 centered at 50,50
+      const pts = [];
+      const N = 200;
+      for (let i = 0; i <= N; i++) {
+        const t = (i / N) * 2 * Math.PI;
+        const r = 35 * Math.abs(Math.cos(3 * t));
+        pts.push([50 + r * Math.cos(t), 50 + r * Math.sin(t)]);
+      }
+      const d = 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
+      return `<path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    },
+    engrave: (x, y, R) => {
+      const r = Math.sqrt(x * x + y * y);
+      const theta = Math.atan2(y, x);
+      const targetR = 0.65 * R * Math.abs(Math.cos(3 * theta));
+      return Math.abs(r - targetR);
+    },
+  },
+  {
+    id: 'eye',
+    name: 'All-Seeing',
+    blurb: 'The protective eye — a sigil borrowed from antiquity, never truly out of style.',
+    tag: 'oculus · vigilans',
+    svg: (c, w) => {
+      // Almond eye outline + iris + pupil + lashes
+      const eyeOutline = 'M 12,50 Q 50,18 88,50 Q 50,82 12,50 Z';
+      const iris = '<circle cx="50" cy="50" r="14" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      const pupil = '<circle cx="50" cy="50" r="5" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      const dot = '<circle cx="50" cy="50" r="1.4" fill="' + c + '"/>';
+      // Lashes top
+      let lashes = '';
+      for (let i = 0; i < 5; i++) {
+        const t = -0.6 + i * 0.3;
+        const x1 = 50 + 32 * Math.sin(t), y1 = 50 - 28 + 4 * Math.abs(t);
+        const x2 = x1 + 4 * Math.sin(t), y2 = y1 - 7;
+        lashes += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+      }
+      return `<path d="${eyeOutline}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linejoin="round"/>${iris}${pupil}${dot}${lashes}`;
+    },
+    engrave: (x, y, R) => {
+      // Almond curves (top/bottom): y = ±A * cos(πx / W) for |x|<W
+      // Approximate the painter's almond with: |x|/W^2 + (y/H)^2 = 1, then sub for distance
+      const W = 0.78 * R, H = 0.32 * R;
+      let dEye = Infinity;
+      if (Math.abs(x) < W) {
+        const yTop = H * Math.cos(Math.PI * x / (2 * W));
+        dEye = Math.min(Math.abs(y - yTop), Math.abs(y + yTop));
+      } else {
+        // Past the ends — distance to corner
+        dEye = Math.min(
+          Math.sqrt((Math.abs(x) - W) ** 2 + y ** 2),
+        );
+      }
+      const r = Math.sqrt(x * x + y * y);
+      const dIris = Math.abs(r - 0.28 * R);
+      const dPupil = Math.abs(r - 0.10 * R);
+      return Math.min(dEye, dIris, dPupil);
+    },
+  },
+  {
+    id: 'sun',
+    name: 'Sun',
+    blurb: 'A radiant sun with sixteen rays. The disc itself is encoded; the rays are pure ornament.',
+    tag: 'sol · invictus',
+    svg: (c, w) => {
+      let g = '<circle cx="50" cy="50" r="18" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      // 16 rays
+      for (let i = 0; i < 16; i++) {
+        const t = (i / 16) * 2 * Math.PI;
+        const r1 = 24, r2 = 38;
+        const x1 = 50 + r1 * Math.cos(t), y1 = 50 + r1 * Math.sin(t);
+        const x2 = 50 + r2 * Math.cos(t), y2 = 50 + r2 * Math.sin(t);
+        g += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+      }
+      // Inner small ring
+      g += '<circle cx="50" cy="50" r="9" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      return g;
+    },
+    engrave: (x, y, R) => {
+      const r = Math.sqrt(x * x + y * y);
+      const dDisc = Math.abs(r - 0.36 * R);
+      const dInner = Math.abs(r - 0.18 * R);
+      // Rays — distance to the nearest of 16 radial segments at r in [0.48R, 0.76R]
+      let dRay = Infinity;
+      if (r > 0.48 * R && r < 0.76 * R) {
+        const theta = Math.atan2(y, x);
+        const sector = Math.PI / 8;
+        const wrap = ((theta % sector) + sector) % sector;
+        const dAng = Math.min(wrap, sector - wrap);
+        dRay = dAng * r; // arc-length equivalent
+      }
+      return Math.min(dDisc, dInner, dRay);
+    },
+  },
+  {
+    id: 'snake',
+    name: 'Ouroboros',
+    blurb: 'The serpent that consumes its tail — endurance, recursion, the quiet promise of return.',
+    tag: 'serpens · perpetuus',
+    svg: (c, w) => {
+      // A spiral that wraps once then returns
+      let path = 'M ';
+      const N = 80;
+      const pts = [];
+      for (let i = 0; i <= N; i++) {
+        const t = (i / N) * 2 * Math.PI * 1.85;
+        const r = 14 + 18 * (i / N);
+        pts.push([50 + r * Math.cos(t), 50 + r * Math.sin(t)]);
+      }
+      path += pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
+      // Head (circle at end) and small triangle for fang
+      const head = pts[pts.length - 1];
+      let g = `<path d="${path}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+      g += `<circle cx="${head[0].toFixed(1)}" cy="${head[1].toFixed(1)}" r="3.5" stroke="${c}" stroke-width="${w}" fill="none"/>`;
+      // Scales — small ticks across the spiral
+      for (let i = 8; i < N; i += 5) {
+        const a = pts[i - 1], b = pts[i + 1];
+        const dx = b[0] - a[0], dy = b[1] - a[1];
+        const len = Math.sqrt(dx * dx + dy * dy) || 1;
+        const nx = -dy / len * 2, ny = dx / len * 2;
+        g += `<line x1="${(pts[i][0] - nx).toFixed(1)}" y1="${(pts[i][1] - ny).toFixed(1)}" x2="${(pts[i][0] + nx).toFixed(1)}" y2="${(pts[i][1] + ny).toFixed(1)}" stroke="${c}" stroke-width="${(w * 0.6).toFixed(1)}" stroke-linecap="round"/>`;
+      }
+      return g;
+    },
+    engrave: (x, y, R) => {
+      const r = Math.sqrt(x * x + y * y);
+      const theta = Math.atan2(y, x);
+      // Spiral: r(t) = 0.30R + 0.36R * (t / (2π * 1.85)) for t ∈ [0, 2π·1.85]
+      // Find closest point on spiral
+      let best = Infinity;
+      const N = 60;
+      for (let i = 0; i <= N; i++) {
+        const t = (i / N) * 2 * Math.PI * 1.85;
+        const sr = 0.30 * R + 0.36 * R * (i / N);
+        const sx = sr * Math.cos(t), sy = sr * Math.sin(t);
+        const d2 = (x - sx) ** 2 + (y - sy) ** 2;
+        if (d2 < best) best = d2;
+      }
+      return Math.sqrt(best);
+    },
+  },
+  {
+    id: 'compass',
+    name: 'Compass',
+    blurb: 'Eight points to orient the wearer. A wayfinder for things that travel.',
+    tag: 'rosa · ventorum',
+    svg: (c, w) => {
+      let g = '';
+      // Outer ring
+      g += '<circle cx="50" cy="50" r="35" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      g += '<circle cx="50" cy="50" r="20" stroke="' + c + '" stroke-width="' + w + '" fill="none"/>';
+      // Eight points (long N/S/E/W, short NE/NW/SE/SW)
+      const pts = [
+        [0, -35, 0, -10, true],   // N
+        [35, 0, 10, 0, true],     // E
+        [0, 35, 0, 10, true],     // S
+        [-35, 0, -10, 0, true],   // W
+        [25, -25, 7, -7, false],  // NE
+        [25, 25, 7, 7, false],
+        [-25, 25, -7, 7, false],
+        [-25, -25, -7, -7, false],
+      ];
+      for (const [dx, dy, ex, ey, long] of pts) {
+        const sw = long ? w : w * 0.6;
+        g += `<line x1="${50 + dx}" y1="${50 + dy}" x2="${50 + ex}" y2="${50 + ey}" stroke="${c}" stroke-width="${sw.toFixed(1)}" stroke-linecap="round"/>`;
+      }
+      // Center dot
+      g += '<circle cx="50" cy="50" r="1.8" fill="' + c + '"/>';
+      return g;
+    },
+    engrave: (x, y, R) => {
+      const r = Math.sqrt(x * x + y * y);
+      const dRing1 = Math.abs(r - 0.70 * R);
+      const dRing2 = Math.abs(r - 0.40 * R);
+      // 4 long radial spokes (cardinal): closest to a horizontal/vertical line
+      const dCard = (r > 0.20 * R && r < 0.70 * R)
+        ? Math.min(Math.abs(x), Math.abs(y))
+        : Infinity;
+      // 4 short diagonal spokes
+      const dDiag = (r > 0.14 * R && r < 0.50 * R)
+        ? Math.min(Math.abs(x - y), Math.abs(x + y)) / Math.SQRT2
+        : Infinity;
+      return Math.min(dRing1, dRing2, dCard, dDiag);
+    },
+  },
+  {
+    id: 'monogram',
+    name: 'Monogram',
+    blurb: 'Two interlaced letters, the atelier\'s mark. The cipher the house has used since 1924.',
+    tag: 'atelier · slc',
+    svg: (c, w) => {
+      // Stylized SLC interlace — three letters as overlapping curves
+      let g = '';
+      // S: left curve
+      g += `<path d="M 30,28 Q 18,28 18,42 Q 18,52 30,52 Q 42,52 42,62 Q 42,72 30,72" stroke="${c}" stroke-width="${w * 1.2}" fill="none" stroke-linecap="round"/>`;
+      // L: vertical with foot
+      g += `<path d="M 50,28 L 50,72 L 64,72" stroke="${c}" stroke-width="${w * 1.2}" fill="none" stroke-linecap="round"/>`;
+      // C: open arc
+      g += `<path d="M 82,40 Q 70,28 60,40 Q 56,50 60,60 Q 70,72 82,60" stroke="${c}" stroke-width="${w * 1.2}" fill="none" stroke-linecap="round"/>`;
+      // Decorative outer arc (atelier seal)
+      g += '<circle cx="50" cy="50" r="42" stroke="' + c + '" stroke-width="' + (w * 0.7).toFixed(1) + '" fill="none" stroke-dasharray="2,3"/>';
+      return g;
+    },
+    engrave: (x, y, R) => {
+      // Three letter strokes: parameterize each as a polyline and find min distance.
+      const segs = [];
+      // S — three quad segments approximated as polylines (in normalized -1..1 coords scaled to R)
+      const sPath = [
+        [-0.40, -0.44], [-0.65, -0.44], [-0.65, -0.10], [-0.40, -0.10],
+        [-0.16, -0.10], [-0.16, 0.24], [-0.40, 0.24], [-0.65, 0.24], [-0.65, 0.44],
+      ];
+      const lPath = [[0.0, -0.44], [0.0, 0.44], [0.28, 0.44]];
+      const cPath = [
+        [0.65, -0.20], [0.40, -0.44], [0.20, -0.20], [0.12, 0.0], [0.20, 0.20],
+        [0.40, 0.44], [0.65, 0.20],
+      ];
+      function distToPolyline(pts) {
+        let best = Infinity;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const ax = pts[i][0] * R, ay = pts[i][1] * R;
+          const bx = pts[i + 1][0] * R, by = pts[i + 1][1] * R;
+          const dx = bx - ax, dy = by - ay;
+          const t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy)));
+          const px = ax + t * dx, py = ay + t * dy;
+          const d2 = (x - px) ** 2 + (y - py) ** 2;
+          if (d2 < best) best = d2;
+        }
+        return Math.sqrt(best);
+      }
+      const dS = distToPolyline(sPath);
+      const dL = distToPolyline(lPath);
+      const dC = distToPolyline(cPath);
+      // Outer dashed seal — distance to circle r=0.84R
+      const r = Math.sqrt(x * x + y * y);
+      const dSeal = Math.abs(r - 0.84 * R);
+      return Math.min(dS, dL, dC, dSeal);
+    },
+  },
+];
+
+// ============================================================================
+// BAKE motif engraving into the height field. Engraving = -0.4mm groove
+// where the motif distance is below 0.5mm threshold.
+// ============================================================================
+function bakeMotifEngraving(field, motifId, res = RES, radius = RADIUS_MM, channels = null) {
+  const motif = MOTIFS.find(m => m.id === motifId);
+  if (!motif) return field;
+  const dx = (2 * radius) / (res - 1);
+  // The engraving is the dominant visual feature on the tile — make it deep
+  // enough to read clearly under raking light, wide enough to print reliably
+  // on PolyJet at 16µm layers (min feature ~0.1mm).
+  const grooveDepth = ENGRAVE_DEPTH;
+  const halfWidth = 0.55; // mm — line half-thickness; full = 1.1mm
+  // Floor the cut at 0.5mm from the underside so the printed line is never
+  // less than 0.3mm of Elastico™ thick (fragility threshold for flexing fabric).
+  const minRemaining = 0.5;
+
+  // If channels are passed, compute protrusion locations so engraving can
+  // gracefully avoid them. Without this, the engraving cuts into the bumps
+  // and destroys the count signal.
+  const protMask = [];
+  if (channels) {
+    const n = 3 + (channels.count % 16);
+    const baseOff = ((channels.angles >> 4) / 16) * 2 * Math.PI;
+    const modAmp = ((channels.angles & 0x0F) / 15) * (Math.PI / n);
+    for (let i = 0; i < n; i++) {
+      const t = baseOff + i * (2 * Math.PI / n) + modAmp * Math.sin(2 * i);
+      protMask.push({ x: 0.65 * radius * Math.cos(t), y: 0.65 * radius * Math.sin(t) });
+    }
+  }
+  const protSpareR = 2.0; // mm — clear zone radius around each bump
+
+  for (let j = 0; j < res; j++) {
+    const y = -radius + j * dx;
+    for (let i = 0; i < res; i++) {
+      const x = -radius + i * dx;
+      const r = Math.sqrt(x * x + y * y);
+      // Restrict engraving to inner band so it doesn't disturb RS markers
+      if (r > 0.84 * radius) continue;
+      if (field[j * res + i] === 0) continue;
+      const d = motif.engrave(x, y, radius);
+      if (d < halfWidth) {
+        // Protrusion-aware attenuation: if this point is near a bump, the
+        // engraving fades out so the bump stays readable.
+        let protProx = 1; // 1 = fully cut, 0 = no cut
+        for (const p of protMask) {
+          const pd = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+          if (pd < protSpareR) {
+            const t = pd / protSpareR;
+            // Smooth fade from 0 at bump centre to 1 at protSpareR
+            protProx = Math.min(protProx, 0.5 - 0.5 * Math.cos(t * Math.PI));
+          }
+        }
+        // Smooth groove with a soft falloff
+        const taper = Math.cos((d / halfWidth) * Math.PI / 2);
+        const cut = grooveDepth * taper * protProx;
+        field[j * res + i] = Math.max(field[j * res + i] - cut, minRemaining);
+      }
+    }
+  }
+  return field;
+}
+
+// ============================================================================
+// PANEL: MOTIF
+// ============================================================================
+let motifTile = null;
+let currentMotifId = null;
+let currentMotifChannels = null;
+let currentMotifFieldId = null;
+let currentPaletteId = 'editorial';
+
+function initMotif() {
+  // Render motif picker grid
+  const grid = $('motif-grid');
+  grid.innerHTML = MOTIFS.map(m => `
+    <div class="motif-card" data-motif="${m.id}">
+      <div class="motif-svg-wrap">
+        <svg viewBox="0 0 100 100">${m.svg('var(--ink)', 1.2)}</svg>
+      </div>
+      <div class="motif-name">
+        <h4>${m.name}</h4>
+        <span class="tag">${m.tag}</span>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.motif-card').forEach(card => {
+    card.addEventListener('click', () => selectMotif(card.dataset.motif));
+  });
+
+  // Render palette picker
+  const pgrid = $('palette-grid');
+  pgrid.innerHTML = PALETTES.map(p => `
+    <div class="palette-card ${p.id === currentPaletteId ? 'selected' : ''}" data-palette="${p.id}">
+      <div class="palette-swatches">
+        ${p.swatches.map(s => `<span style="background:${s}"></span>`).join('')}
+      </div>
+      <h5>${p.name}</h5>
+      <p>${p.blurb}</p>
+    </div>
+  `).join('');
+  pgrid.querySelectorAll('.palette-card').forEach(c => {
+    c.addEventListener('click', () => selectPalette(c.dataset.palette));
+  });
+
+  $('btn-motif-mint').addEventListener('click', () => {
+    if (!currentMotifId) return;
+    const id = (Math.random() * 0x100000000) >>> 0;
+    refreshMotif(currentMotifId, id);
+  });
+  $('btn-motif-stl').addEventListener('click', () => {
+    if (!currentMotifChannels || !currentMotifFieldId) return;
+    const field = buildHeightField(currentMotifChannels, 0);
+    bakeMotifEngraving(field, currentMotifId, RES, RADIUS_MM, currentMotifChannels);
+    const buf = fieldToStlBinary(field);
+    downloadBlob(buf, `pattern_${currentMotifId}_${fmtId(currentMotifFieldId).slice(2)}.stl`);
+    showStatus('STL downloaded');
+  });
+  $('btn-motif-on-garment').addEventListener('click', () => {
+    document.querySelector('.tab[data-tab="garment"]').click();
+  });
+}
+
+function selectPalette(id) {
+  currentPaletteId = id;
+  document.querySelectorAll('.palette-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.palette === id);
+  });
+  // Re-render the 3D preview with new palette
+  if (currentMotifChannels && currentMotifId && motifTile) {
+    const field = buildHeightField(currentMotifChannels, 0);
+    bakeMotifEngraving(field, currentMotifId, RES, RADIUS_MM, currentMotifChannels);
+    const palette = PALETTES.find(p => p.id === id);
+    motifTile.setField(field, RES, RADIUS_MM, palette);
+  }
+  // Also re-render garment if open
+  if (garmentTile) updateGarmentMockup();
+}
+
+function selectMotif(id) {
+  currentMotifId = id;
+  document.querySelectorAll('.motif-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.motif === id);
+  });
+  $('motif-stage').style.display = 'grid';
+  // Mint a fresh ID on first selection
+  const newId = (Math.random() * 0x100000000) >>> 0;
+  refreshMotif(id, newId);
+}
+
+function refreshMotif(motifId, itemId) {
+  const motif = MOTIFS.find(m => m.id === motifId);
+  if (!motif) return;
+  const ch = encodeId(itemId);
+  currentMotifChannels = ch;
+  currentMotifFieldId = itemId;
+
+  // Selected card preview
+  $('motif-selected-card').innerHTML = `
+    <div class="motif-mini">
+      <svg viewBox="0 0 100 100">${motif.svg('var(--ink)', 1.5)}</svg>
+    </div>
+    <div class="motif-info">
+      <h4>${motif.name}</h4>
+      <p>${motif.blurb}</p>
+    </div>`;
+
+  $('motif-id-display').textContent = fmtId(itemId);
+  $('motif-meta-id').textContent = fmtId(itemId);
+  $('motif-meta-name').textContent = motif.name;
+
+  // Channel summary
+  const family = MACRO_FAMILIES[ch.macro];
+  const protrusions = 3 + (ch.count % 16);
+  const heightMm = (1.5 + (ch.height / 255) * 6.5).toFixed(2);
+  $('motif-channels-grid').innerHTML = `
+    <div class="ch"><div class="ch-name">Visible motif</div><div class="ch-val" style="font-size:14px;">${motif.name} <span class="unit">engraved · -0.45 mm</span></div></div>
+    <div class="ch"><div class="ch-name">Hidden silhouette</div><div class="ch-val" style="font-size:14px;">${family} <span class="unit">macro=${ch.macro}</span></div></div>
+    <div class="ch"><div class="ch-name">Bumps</div><div class="ch-val">${protrusions} <span class="unit">at ${heightMm} mm</span></div></div>
+    <div class="ch"><div class="ch-name">Reed-Solomon</div><div class="ch-val" style="font-size:13px;">${fmtRs(ch.rs)}</div></div>`;
+
+  // 3D preview
+  if (!motifTile) {
+    motifTile = new Tile3D($('canvas-3d-motif'));
+    motifTile.start();
+  }
+  const field = buildHeightField(ch, 0);
+  bakeMotifEngraving(field, motifId, RES, RADIUS_MM, ch);
+  const palette = PALETTES.find(p => p.id === currentPaletteId);
+  setTimeout(() => motifTile.setField(field, RES, RADIUS_MM, palette), 50);
+
+  // Sync with order panel
+  $('order-step-1-meta').textContent = `Ready · ${fmtId(itemId)} · ${motif.name}`;
+
+  // Sync with garment panel
+  updateGarmentMockup();
+}
+
+// ============================================================================
+// ARTWORKS — decorative compositions the tile lives inside.
+// Each artwork returns SVG that fills viewBox 0..600 in both dims, with
+// transparent background; the tile (a separate group) is drawn on top.
+// ============================================================================
+const ARTWORKS = {
+  botanical: {
+    name: 'Botanical wreath',
+    blurb: 'A circular wreath of stems and small blossoms, the tile sitting at the centre as a medallion.',
+    initialTile: { x: 300, y: 300, scale: 1.0 },
+    render: () => {
+      const lines = [];
+      for (let k = 0; k < 12; k++) {
+        const t = (k / 12) * 2 * Math.PI;
+        const innerR = 130, outerR = 250;
+        const sx = 300 + innerR * Math.cos(t), sy = 300 + innerR * Math.sin(t);
+        const ex = 300 + outerR * Math.cos(t), ey = 300 + outerR * Math.sin(t);
+        const perp = t + Math.PI / 2;
+        const cx = (sx + ex) / 2 + 30 * Math.cos(perp) * (k % 2 === 0 ? 1 : -1);
+        const cy = (sy + ey) / 2 + 30 * Math.sin(perp) * (k % 2 === 0 ? 1 : -1);
+        lines.push(`<path d="M ${sx.toFixed(1)},${sy.toFixed(1)} Q ${cx.toFixed(1)},${cy.toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}" stroke="#3a2818" stroke-width="1.4" fill="none" stroke-linecap="round"/>`);
+        const lx = (sx + cx + ex) / 3, ly = (sy + cy + ey) / 3;
+        const leafAng = Math.atan2(ey - sy, ex - sx) + Math.PI / 6;
+        lines.push(`<ellipse cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" rx="14" ry="6" fill="#88a070" stroke="#3a5028" stroke-width="0.8" transform="rotate(${(leafAng * 180 / Math.PI).toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})"/>`);
+        for (let p = 0; p < 5; p++) {
+          const pa = (p / 5) * 2 * Math.PI;
+          const px = ex + 7 * Math.cos(pa), py = ey + 7 * Math.sin(pa);
+          lines.push(`<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="6" ry="3.5" fill="#b8472b" stroke="#702818" stroke-width="0.6" transform="rotate(${(pa * 180 / Math.PI + 90).toFixed(1)} ${px.toFixed(1)} ${py.toFixed(1)})"/>`);
+        }
+        lines.push(`<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="3.5" fill="#d4a574" stroke="#704018" stroke-width="0.5"/>`);
+      }
+      for (let k = 0; k < 24; k++) {
+        const t = (k + 0.5) / 12 * Math.PI;
+        const r = 200 + (k % 2) * 22;
+        const x = 300 + r * Math.cos(t), y = 300 + r * Math.sin(t);
+        lines.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2" fill="#d4a574"/>`);
+      }
+      return lines.join('');
+    },
+  },
+  mandala: {
+    name: 'Mandala',
+    blurb: 'Concentric rings of geometric petals — the tile is the still centre of a slow wheel.',
+    initialTile: { x: 300, y: 300, scale: 1.0 },
+    render: () => {
+      const lines = [];
+      for (let k = 0; k < 24; k++) {
+        const t = (k / 24) * 2 * Math.PI;
+        const r1 = 200, r2 = 270;
+        const x1 = 300 + r1 * Math.cos(t), y1 = 300 + r1 * Math.sin(t);
+        const x2 = 300 + r2 * Math.cos(t), y2 = 300 + r2 * Math.sin(t);
+        const perp = t + Math.PI / 2;
+        const c1x = x1 + 14 * Math.cos(perp), c1y = y1 + 14 * Math.sin(perp);
+        const c2x = x1 - 14 * Math.cos(perp), c2y = y1 - 14 * Math.sin(perp);
+        lines.push(`<path d="M ${x1.toFixed(1)},${y1.toFixed(1)} Q ${c1x.toFixed(1)},${c1y.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)} Q ${c2x.toFixed(1)},${c2y.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)} Z" fill="#b8472b" fill-opacity="0.18" stroke="#702818" stroke-width="0.8"/>`);
+      }
+      for (let k = 0; k < 12; k++) {
+        const t = (k / 12) * 2 * Math.PI + Math.PI / 12;
+        const r1 = 120, r2 = 195;
+        const x1 = 300 + r1 * Math.cos(t), y1 = 300 + r1 * Math.sin(t);
+        const x2 = 300 + r2 * Math.cos(t), y2 = 300 + r2 * Math.sin(t);
+        const perp = t + Math.PI / 2;
+        const c1x = (x1 + x2) / 2 + 18 * Math.cos(perp), c1y = (y1 + y2) / 2 + 18 * Math.sin(perp);
+        const c2x = (x1 + x2) / 2 - 18 * Math.cos(perp), c2y = (y1 + y2) / 2 - 18 * Math.sin(perp);
+        lines.push(`<path d="M ${x1.toFixed(1)},${y1.toFixed(1)} Q ${c1x.toFixed(1)},${c1y.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)} Q ${c2x.toFixed(1)},${c2y.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)} Z" fill="#7a8fa8" fill-opacity="0.25" stroke="#1a3a6b" stroke-width="0.9"/>`);
+      }
+      lines.push(`<circle cx="300" cy="300" r="115" fill="none" stroke="#3a2818" stroke-width="0.8"/>`);
+      lines.push(`<circle cx="300" cy="300" r="280" fill="none" stroke="#3a2818" stroke-width="0.8" stroke-dasharray="3,5"/>`);
+      for (let k = 0; k < 24; k++) {
+        const t = (k / 24) * 2 * Math.PI;
+        lines.push(`<circle cx="${(300 + 110 * Math.cos(t)).toFixed(1)}" cy="${(300 + 110 * Math.sin(t)).toFixed(1)}" r="1.5" fill="#3a2818"/>`);
+      }
+      return lines.join('');
+    },
+  },
+  deco: {
+    name: 'Art Deco panel',
+    blurb: 'Vertical fan rays and stacked semicircles — the tile is a brass cabochon set in marble.',
+    initialTile: { x: 300, y: 300, scale: 1.0 },
+    render: () => {
+      const lines = [];
+      for (let k = -8; k <= 8; k++) {
+        const t = -Math.PI / 2 + (k / 16) * Math.PI * 0.9;
+        const ex = 300 + 320 * Math.cos(t), ey = 300 + 320 * Math.sin(t);
+        lines.push(`<line x1="300" y1="300" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#c4a358" stroke-width="${k % 2 === 0 ? 1.2 : 0.6}" opacity="0.7"/>`);
+      }
+      for (const r of [80, 130, 180, 240]) {
+        lines.push(`<path d="M ${300 - r},300 A ${r} ${r} 0 0 1 ${300 + r},300" stroke="#7d6a3a" stroke-width="1.2" fill="none"/>`);
+      }
+      lines.push(`<polygon points="300,40 320,80 280,80" fill="#7d6a3a"/>`);
+      lines.push(`<polygon points="300,90 312,115 288,115" fill="#c4a358"/>`);
+      lines.push(`<line x1="60" y1="540" x2="540" y2="540" stroke="#3a2818" stroke-width="1.2"/>`);
+      lines.push(`<line x1="60" y1="546" x2="540" y2="546" stroke="#3a2818" stroke-width="0.6"/>`);
+      for (let k = 0; k < 7; k++) {
+        const x = 100 + k * 67;
+        lines.push(`<polygon points="${x},532 ${x+6},540 ${x},548 ${x-6},540" fill="#7d6a3a"/>`);
+      }
+      for (let k = 0; k < 6; k++) {
+        const yy = 130 + k * 60;
+        lines.push(`<line x1="40" y1="${yy}" x2="60" y2="${yy}" stroke="#3a2818" stroke-width="0.8"/>`);
+        lines.push(`<line x1="540" y1="${yy}" x2="560" y2="${yy}" stroke="#3a2818" stroke-width="0.8"/>`);
+      }
+      return lines.join('');
+    },
+  },
+  vine: {
+    name: 'Vine border',
+    blurb: 'A trailing vine that wraps the page — the tile is a bloom along its length.',
+    initialTile: { x: 300, y: 300, scale: 1.0 },
+    render: () => {
+      const lines = [];
+      const path = [];
+      const N = 80;
+      for (let i = 0; i <= N; i++) {
+        const t = (i / N) * 2 * Math.PI;
+        path.push([300 + 220 * Math.sin(t * 2), 300 + 200 * Math.sin(t)]);
+      }
+      lines.push(`<path d="M ${path.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L ')}" stroke="#3a5028" stroke-width="2.2" fill="none" stroke-linecap="round"/>`);
+      for (let i = 4; i < N; i += 6) {
+        const [x, y] = path[i];
+        const [px, py] = path[i - 1];
+        const ang = Math.atan2(y - py, x - px) + Math.PI / 2;
+        const lx = x + 12 * Math.cos(ang), ly = y + 12 * Math.sin(ang);
+        const lx2 = x - 12 * Math.cos(ang), ly2 = y - 12 * Math.sin(ang);
+        lines.push(`<ellipse cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" rx="14" ry="6" fill="#88a070" stroke="#3a5028" stroke-width="0.8" transform="rotate(${(ang * 180 / Math.PI).toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})"/>`);
+        lines.push(`<ellipse cx="${lx2.toFixed(1)}" cy="${ly2.toFixed(1)}" rx="11" ry="5" fill="#88a070" fill-opacity="0.85" stroke="#3a5028" stroke-width="0.6" transform="rotate(${(ang * 180 / Math.PI + 180).toFixed(1)} ${lx2.toFixed(1)} ${ly2.toFixed(1)})"/>`);
+      }
+      for (let i = 12; i < N; i += 12) {
+        const [x, y] = path[i];
+        for (let p = 0; p < 5; p++) {
+          const pa = (p / 5) * 2 * Math.PI;
+          const px = x + 9 * Math.cos(pa), py = y + 9 * Math.sin(pa);
+          lines.push(`<ellipse cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" rx="7" ry="4" fill="#b8472b" fill-opacity="0.9" stroke="#702818" stroke-width="0.6" transform="rotate(${(pa * 180 / Math.PI + 90).toFixed(1)} ${px.toFixed(1)} ${py.toFixed(1)})"/>`);
+        }
+        lines.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#d4a574" stroke="#704018" stroke-width="0.5"/>`);
+      }
+      return lines.join('');
+    },
+  },
+  abstract: {
+    name: 'Abstract bloom',
+    blurb: 'Splashes and arcs in three colours — the tile is a punctuation in the painter\'s gesture.',
+    initialTile: { x: 300, y: 300, scale: 1.0 },
+    render: () => {
+      const lines = [];
+      const colors = ['#b8472b', '#1a3a6b', '#7d6a3a'];
+      for (let k = 0; k < 9; k++) {
+        const c = colors[k % 3];
+        const t = (k / 9) * 2 * Math.PI;
+        const r = 180 + (k % 3) * 50;
+        const sx = 300 + r * Math.cos(t), sy = 300 + r * Math.sin(t);
+        const ex = 300 + r * Math.cos(t + 1.5), ey = 300 + r * Math.sin(t + 1.5);
+        const cx = 300 + (r - 40) * Math.cos(t + 0.75), cy = 300 + (r - 40) * Math.sin(t + 0.75);
+        lines.push(`<path d="M ${sx.toFixed(1)},${sy.toFixed(1)} Q ${cx.toFixed(1)},${cy.toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}" stroke="${c}" stroke-width="${(3 + k % 3 * 2)}" fill="none" stroke-linecap="round" opacity="0.65"/>`);
+      }
+      // Use deterministic pseudo-random for repeatability
+      let seed = 42;
+      const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      for (let k = 0; k < 40; k++) {
+        const a = rand() * 2 * Math.PI;
+        const r = 100 + rand() * 200;
+        const x = 300 + r * Math.cos(a);
+        const y = 300 + r * Math.sin(a);
+        const c = colors[k % 3];
+        lines.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(2 + rand() * 4).toFixed(1)}" fill="${c}" opacity="${(0.4 + rand() * 0.4).toFixed(2)}"/>`);
+      }
+      lines.push(`<path d="M 50,260 Q 250,180 400,310 T 560,250" stroke="#15110b" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>`);
+      return lines.join('');
+    },
+  },
+};
+
+// ============================================================================
+// PANEL: COMPOSE
+// ============================================================================
+let currentArtwork = 'botanical';
+let composeTilePos = { x: 300, y: 300, scale: 1.0 };
+let composeDragging = false;
+let composeDragOffset = { x: 0, y: 0 };
+const TILE_SCALES = [
+  { label: 'small',  value: 0.65 },
+  { label: 'medium', value: 1.0 },
+  { label: 'large',  value: 1.4 },
+];
+let composeScaleIdx = 1;
+
+function initCompose() {
+  document.querySelectorAll('.artwork-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.artwork-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentArtwork = btn.dataset.artwork;
+      const art = ARTWORKS[currentArtwork];
+      composeTilePos = { ...art.initialTile };
+      composeTilePos.scale = TILE_SCALES[composeScaleIdx].value;
+      renderCompose();
+    });
+  });
+  $('btn-compose-export').addEventListener('click', exportCompose);
+  $('btn-compose-scale').addEventListener('click', () => {
+    composeScaleIdx = (composeScaleIdx + 1) % TILE_SCALES.length;
+    composeTilePos.scale = TILE_SCALES[composeScaleIdx].value;
+    $('btn-compose-scale').textContent = `Tile size: ${TILE_SCALES[composeScaleIdx].label}`;
+    renderCompose();
+  });
+
+  const canvas = $('compose-canvas');
+  const getXY = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {
+      x: (t.clientX - r.left) / r.width * 600,
+      y: (t.clientY - r.top) / r.height * 600,
+    };
+  };
+  const start = (e) => {
+    const tile = e.target.closest('.compose-tile');
+    if (!tile) return;
+    e.preventDefault();
+    composeDragging = true;
+    const p = getXY(e);
+    composeDragOffset = { x: p.x - composeTilePos.x, y: p.y - composeTilePos.y };
+  };
+  const move = (e) => {
+    if (!composeDragging) return;
+    e.preventDefault();
+    const p = getXY(e);
+    composeTilePos.x = Math.max(80, Math.min(520, p.x - composeDragOffset.x));
+    composeTilePos.y = Math.max(80, Math.min(520, p.y - composeDragOffset.y));
+    renderCompose();
+  };
+  const end = () => { composeDragging = false; };
+
+  canvas.addEventListener('mousedown', start);
+  document.addEventListener('mousemove', move);
+  document.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  document.addEventListener('touchmove', move, { passive: false });
+  document.addEventListener('touchend', end);
+}
+
+function renderCompose() {
+  const art = ARTWORKS[currentArtwork];
+  if (!art) return;
+
+  $('compose-art-title').textContent = art.name;
+  $('compose-art-blurb').textContent = art.blurb;
+
+  // Hint if user hasn't chosen a motif yet
+  const helpEl = $('compose-help');
+  if (helpEl) {
+    helpEl.textContent = currentMotifId
+      ? 'Drag the tile to reposition'
+      : 'Open the Motif tab to pick a design — showing showcase tile';
+  }
+
+  const motif = MOTIFS.find(m => m.id === currentMotifId) || MOTIFS[0];
+  const palette = PALETTES.find(p => p.id === currentPaletteId);
+  const tileR = 50 * composeTilePos.scale;
+
+  const rgbToHex = (rgb) => '#' + rgb.map(v => Math.round(v * 255).toString(16).padStart(2, '0')).join('');
+  const bodyHex = rgbToHex(palette.body);
+  const accentHex = rgbToHex(palette.accent);
+  const bumpsHex = rgbToHex(palette.bumps);
+
+  const ch = currentMotifChannels || encodeId(0x2DCA3791);
+  const protrusions = 3 + (ch.count % 16);
+  const angles = ch.angles;
+  const baseOff = ((angles >> 4) / 16) * 2 * Math.PI;
+  const modAmp = ((angles & 0x0F) / 15) * (Math.PI / protrusions);
+  const bumps = [];
+  for (let i = 0; i < protrusions; i++) {
+    bumps.push(baseOff + i * (2 * Math.PI / protrusions) + modAmp * Math.sin(2 * i));
+  }
+
+  const motifSvg = motif.svg(accentHex, 1.4);
+
+  let tileSvg = '';
+  tileSvg += `<circle cx="0" cy="0" r="${tileR}" fill="${bodyHex}" stroke="${accentHex}" stroke-width="1"/>`;
+  tileSvg += `<circle cx="0" cy="0" r="${(tileR * 0.94).toFixed(1)}" fill="none" stroke="${accentHex}" stroke-width="0.4" opacity="0.5"/>`;
+  const motifScale = (tileR * 1.6) / 100;
+  tileSvg += `<g transform="translate(${(-tileR * 0.8).toFixed(1)} ${(-tileR * 0.8).toFixed(1)}) scale(${motifScale.toFixed(3)})">${motifSvg}</g>`;
+  for (const t of bumps) {
+    const bx = 0.65 * tileR * Math.cos(t);
+    const by = 0.65 * tileR * Math.sin(t);
+    tileSvg += `<circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="${(tileR * 0.09).toFixed(1)}" fill="${bumpsHex}" stroke="${accentHex}" stroke-width="0.5"/>`;
+  }
+  for (let k = 0; k < 32; k++) {
+    const a = (k / 32) * 2 * Math.PI;
+    const r = 0.92 * tileR;
+    const dotR = ((ch.rs[Math.floor(k / 8)] >> (7 - (k % 8))) & 1) ? (tileR * 0.04) : (tileR * 0.022);
+    tileSvg += `<circle cx="${(r * Math.cos(a)).toFixed(1)}" cy="${(r * Math.sin(a)).toFixed(1)}" r="${dotR.toFixed(1)}" fill="${accentHex}" opacity="0.85"/>`;
+  }
+
+  const canvas = $('compose-canvas');
+  canvas.innerHTML = `
+    <defs>
+      <radialGradient id="paper-bg" cx="50%" cy="50%" r="65%">
+        <stop offset="0%" stop-color="#f4ede0"/>
+        <stop offset="100%" stop-color="#ebe2d0"/>
+      </radialGradient>
+    </defs>
+    <rect width="600" height="600" fill="url(#paper-bg)"/>
+    <g class="artwork-layer">${art.render()}</g>
+    <g class="compose-tile" transform="translate(${composeTilePos.x.toFixed(1)} ${composeTilePos.y.toFixed(1)})">
+      ${tileSvg}
+    </g>`;
+
+  $('compose-tile-id').textContent = currentMotifFieldId ? fmtId(currentMotifFieldId) : '0x2DCA3791';
+  $('compose-tile-motif').textContent = motif.name;
+  $('compose-tile-palette').textContent = palette.name;
+  $('compose-tile-preview').innerHTML = `<svg viewBox="-60 -60 120 120">${tileSvg}</svg>`;
+}
+
+function exportCompose() {
+  const canvas = $('compose-canvas');
+  const svg = canvas.outerHTML;
+  const standalone = svg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+  const blob = new Blob([standalone], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const id = currentMotifFieldId ? fmtId(currentMotifFieldId).slice(2) : 'compose';
+  a.href = url; a.download = `composition_${currentArtwork}_${id}.svg`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus('SVG exported');
+}
+
+// ============================================================================
+// PANEL: ON GARMENT
+// ============================================================================
+let garmentTile = null;
+let currentGarment = 'coat';
+
+const GARMENTS = {
+  coat: {
+    name: 'Linen pleated overcoat',
+    placement: 'Inside lapel, left side',
+    svg: (motifSvg, accentColor) => `
+      <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="lin-fabric" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e6dcc4"/>
+            <stop offset="100%" stop-color="#cebd9d"/>
+          </linearGradient>
+          <pattern id="weave" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
+            <path d="M 0 1.5 L 3 1.5" stroke="#b8a888" stroke-width="0.3" opacity="0.4"/>
+            <path d="M 1.5 0 L 1.5 3" stroke="#b8a888" stroke-width="0.3" opacity="0.25"/>
+          </pattern>
+        </defs>
+        <!-- Base coat shape -->
+        <path d="M 130,80 L 110,150 L 80,440 L 320,440 L 290,150 L 270,80
+                 L 240,90 L 200,110 L 160,90 Z"
+              fill="url(#lin-fabric)" stroke="#a89678" stroke-width="1"/>
+        <!-- Weave overlay -->
+        <path d="M 130,80 L 110,150 L 80,440 L 320,440 L 290,150 L 270,80
+                 L 240,90 L 200,110 L 160,90 Z"
+              fill="url(#weave)" opacity="0.6"/>
+        <!-- Lapels -->
+        <path d="M 200,110 L 160,90 L 130,80 L 110,150 L 130,200 L 175,180 L 200,110 Z"
+              fill="#d6c4a4" stroke="#a89678" stroke-width="0.8" opacity="0.92"/>
+        <path d="M 200,110 L 240,90 L 270,80 L 290,150 L 270,200 L 225,180 L 200,110 Z"
+              fill="#dccaab" stroke="#a89678" stroke-width="0.8" opacity="0.92"/>
+        <!-- Lapel inner shadow -->
+        <path d="M 175,180 L 200,110 L 225,180" stroke="#a89678" stroke-width="0.8" fill="none"/>
+        <!-- Stitching down center -->
+        <line x1="200" y1="110" x2="200" y2="430" stroke="#8e7e62" stroke-width="0.6" stroke-dasharray="2,2"/>
+        <!-- Buttons -->
+        <circle cx="200" cy="220" r="4" fill="#3a2e1e" stroke="#1f180e" stroke-width="0.5"/>
+        <circle cx="200" cy="290" r="4" fill="#3a2e1e" stroke="#1f180e" stroke-width="0.5"/>
+        <circle cx="200" cy="360" r="4" fill="#3a2e1e" stroke="#1f180e" stroke-width="0.5"/>
+        <!-- Cloth folds -->
+        <path d="M 130,200 Q 145,290 130,400" stroke="#a89678" stroke-width="1" fill="none" opacity="0.5"/>
+        <path d="M 270,200 Q 255,290 270,400" stroke="#a89678" stroke-width="1" fill="none" opacity="0.5"/>
+        <!-- Tile location: inside left lapel -->
+        <g transform="translate(150, 170)">
+          <circle r="20" fill="#1c1810" stroke="#0a0805" stroke-width="0.8"/>
+          <circle r="19" fill="#2a2417" stroke="none"/>
+          <g transform="scale(0.36) translate(-50, -50)" opacity="0.85">
+            ${motifSvg(accentColor, 1.6)}
+          </g>
+          <circle r="19" fill="none" stroke="${accentColor}" stroke-width="0.4" opacity="0.7"/>
+          <!-- callout -->
+          <line x1="20" y1="0" x2="80" y2="-30" stroke="#3a2e1e" stroke-width="0.4" stroke-dasharray="2,2"/>
+          <text x="83" y="-26" font-family="JetBrains Mono, monospace" font-size="8" fill="#3a2e1e" letter-spacing="1.5">PATTERN TILE</text>
+          <text x="83" y="-15" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#3a2e1e">Ø 30 mm</text>
+        </g>
+      </svg>`,
+  },
+  scarf: {
+    name: 'Silk scarf',
+    placement: 'Lower-right corner, ¾" from edge',
+    svg: (motifSvg, accentColor) => `
+      <svg viewBox="0 0 400 500">
+        <defs>
+          <linearGradient id="silk-gradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e8d4c0"/>
+            <stop offset="50%" stop-color="#d8b896"/>
+            <stop offset="100%" stop-color="#c19c74"/>
+          </linearGradient>
+        </defs>
+        <!-- Draped scarf shape -->
+        <path d="M 60,80 Q 100,60 200,90 Q 300,120 340,80 L 340,420
+                 Q 290,460 200,430 Q 110,400 60,430 Z"
+              fill="url(#silk-gradient)" stroke="#a18563" stroke-width="0.8"/>
+        <!-- Drape lines -->
+        <path d="M 80,150 Q 160,140 240,180 Q 300,200 320,170" stroke="#a18563" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <path d="M 70,240 Q 150,250 230,230 Q 290,220 325,250" stroke="#a18563" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <path d="M 75,330 Q 155,310 235,340 Q 295,350 322,325" stroke="#a18563" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <!-- Hemline stitching -->
+        <path d="M 60,80 Q 100,60 200,90 Q 300,120 340,80" stroke="#876444" stroke-width="0.4" stroke-dasharray="3,3" fill="none"/>
+        <path d="M 60,430 Q 110,400 200,430 Q 290,460 340,420" stroke="#876444" stroke-width="0.4" stroke-dasharray="3,3" fill="none"/>
+        <!-- Tile location: lower-right -->
+        <g transform="translate(290, 380)">
+          <circle r="18" fill="#1c1810" stroke="#0a0805" stroke-width="0.6"/>
+          <circle r="17" fill="#2a2417"/>
+          <g transform="scale(0.32) translate(-50, -50)" opacity="0.85">
+            ${motifSvg(accentColor, 1.6)}
+          </g>
+          <line x1="-18" y1="0" x2="-90" y2="-40" stroke="#3a2e1e" stroke-width="0.4" stroke-dasharray="2,2"/>
+          <text x="-90" y="-44" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="8" fill="#3a2e1e" letter-spacing="1.5">PATTERN TILE</text>
+          <text x="-90" y="-33" text-anchor="end" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#3a2e1e">Ø 30 mm</text>
+        </g>
+      </svg>`,
+  },
+  dress: {
+    name: 'Linen wrap dress',
+    placement: 'Inner waist tie, left',
+    svg: (motifSvg, accentColor) => `
+      <svg viewBox="0 0 400 500">
+        <defs>
+          <linearGradient id="dress-fabric" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#d8c8a8"/>
+            <stop offset="100%" stop-color="#b8a274"/>
+          </linearGradient>
+        </defs>
+        <!-- Bodice -->
+        <path d="M 150,90 L 130,180 L 250,180 L 250,180 L 270,180 L 250,90
+                 L 230,100 L 200,115 L 170,100 Z"
+              fill="url(#dress-fabric)" stroke="#a08652" stroke-width="0.8"/>
+        <!-- Skirt -->
+        <path d="M 130,180 L 90,460 L 310,460 L 270,180 Z"
+              fill="url(#dress-fabric)" stroke="#a08652" stroke-width="0.8"/>
+        <!-- Wrap line -->
+        <path d="M 130,180 L 200,250 L 270,180" stroke="#85693f" stroke-width="0.7" fill="none"/>
+        <path d="M 200,250 L 200,460" stroke="#85693f" stroke-width="0.5" fill="none" stroke-dasharray="3,3"/>
+        <!-- Tie ends -->
+        <path d="M 130,180 Q 110,200 100,240 L 110,250 Q 125,210 145,200 Z" fill="#c4ad7f" stroke="#85693f" stroke-width="0.5"/>
+        <path d="M 270,180 Q 290,200 300,240 L 290,250 Q 275,210 255,200 Z" fill="#c4ad7f" stroke="#85693f" stroke-width="0.5"/>
+        <!-- Folds -->
+        <path d="M 150,260 Q 165,360 145,440" stroke="#85693f" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <path d="M 250,260 Q 235,360 255,440" stroke="#85693f" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <!-- Tile -->
+        <g transform="translate(120, 230)">
+          <circle r="18" fill="#1c1810" stroke="#0a0805" stroke-width="0.6"/>
+          <circle r="17" fill="#2a2417"/>
+          <g transform="scale(0.32) translate(-50, -50)" opacity="0.85">
+            ${motifSvg(accentColor, 1.6)}
+          </g>
+          <line x1="-18" y1="0" x2="-50" y2="40" stroke="#3a2e1e" stroke-width="0.4" stroke-dasharray="2,2"/>
+          <text x="-50" y="58" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="8" fill="#3a2e1e" letter-spacing="1.5">PATTERN TILE</text>
+          <text x="-50" y="69" text-anchor="end" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#3a2e1e">Ø 30 mm</text>
+        </g>
+      </svg>`,
+  },
+  jacket: {
+    name: 'Wool draped jacket',
+    placement: 'Inside hem, left back',
+    svg: (motifSvg, accentColor) => `
+      <svg viewBox="0 0 400 500">
+        <defs>
+          <linearGradient id="wool-fabric" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5a4a38"/>
+            <stop offset="100%" stop-color="#3d3022"/>
+          </linearGradient>
+        </defs>
+        <!-- Boxy jacket -->
+        <path d="M 110,100 L 90,170 L 80,400 L 320,400 L 310,170 L 290,100
+                 L 250,110 L 200,120 L 150,110 Z"
+              fill="url(#wool-fabric)" stroke="#1f1810" stroke-width="0.8"/>
+        <!-- Lapels (smaller) -->
+        <path d="M 200,120 L 150,110 L 130,150 L 165,200 L 200,120 Z" fill="#4a3c2a" stroke="#1f1810" stroke-width="0.6"/>
+        <path d="M 200,120 L 250,110 L 270,150 L 235,200 L 200,120 Z" fill="#4a3c2a" stroke="#1f1810" stroke-width="0.6"/>
+        <!-- Texture wool weave -->
+        <path d="M 90,200 Q 200,210 310,200" stroke="#241b10" stroke-width="0.4" fill="none" opacity="0.6"/>
+        <path d="M 85,280 Q 200,290 315,280" stroke="#241b10" stroke-width="0.4" fill="none" opacity="0.6"/>
+        <path d="M 82,360 Q 200,370 318,360" stroke="#241b10" stroke-width="0.4" fill="none" opacity="0.6"/>
+        <!-- Stitching -->
+        <line x1="200" y1="120" x2="200" y2="395" stroke="#9c8456" stroke-width="0.4" stroke-dasharray="2,3"/>
+        <!-- Pockets -->
+        <rect x="105" y="270" width="60" height="36" rx="2" fill="none" stroke="#241b10" stroke-width="0.5" stroke-dasharray="2,2"/>
+        <rect x="235" y="270" width="60" height="36" rx="2" fill="none" stroke="#241b10" stroke-width="0.5" stroke-dasharray="2,2"/>
+        <!-- Tile location -->
+        <g transform="translate(135, 380)">
+          <circle r="17" fill="#0a0805" stroke="#000" stroke-width="0.5"/>
+          <circle r="16" fill="#1f1810"/>
+          <g transform="scale(0.30) translate(-50, -50)" opacity="0.92">
+            ${motifSvg('#d4a574', 1.8)}
+          </g>
+          <line x1="-17" y1="0" x2="-60" y2="-25" stroke="#9c8456" stroke-width="0.4" stroke-dasharray="2,2"/>
+          <text x="-63" y="-29" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="8" fill="#d4a574" letter-spacing="1.5">PATTERN TILE</text>
+          <text x="-63" y="-18" text-anchor="end" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#d4a574">Ø 30 mm</text>
+        </g>
+      </svg>`,
+  },
+  bag: {
+    name: 'Leather satchel',
+    placement: 'Underside of flap, right',
+    svg: (motifSvg, accentColor) => `
+      <svg viewBox="0 0 400 500">
+        <defs>
+          <linearGradient id="leather" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8b5a3c"/>
+            <stop offset="60%" stop-color="#6b3f24"/>
+            <stop offset="100%" stop-color="#3f2515"/>
+          </linearGradient>
+        </defs>
+        <!-- Strap -->
+        <path d="M 100,80 Q 200,30 300,80" stroke="#5a3a22" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 100,80 Q 200,30 300,80" stroke="#7a5532" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <!-- Bag body -->
+        <rect x="80" y="170" width="240" height="220" rx="6" fill="url(#leather)" stroke="#2a1a0c" stroke-width="1"/>
+        <!-- Flap -->
+        <path d="M 80,170 L 80,90 Q 80,80 90,80 L 310,80 Q 320,80 320,90 L 320,170
+                 L 280,210 L 200,220 L 120,210 Z"
+              fill="url(#leather)" stroke="#2a1a0c" stroke-width="1"/>
+        <!-- Stitching around flap -->
+        <path d="M 90,90 L 310,90 L 310,200 L 200,212 L 90,200 Z"
+              fill="none" stroke="#d4a574" stroke-width="0.4" stroke-dasharray="3,3"/>
+        <!-- Body stitching -->
+        <rect x="86" y="176" width="228" height="208" rx="5" fill="none" stroke="#d4a574" stroke-width="0.4" stroke-dasharray="3,3"/>
+        <!-- Buckle -->
+        <rect x="190" y="190" width="20" height="14" rx="1" fill="#c0a060" stroke="#604a20" stroke-width="0.5"/>
+        <line x1="200" y1="190" x2="200" y2="204" stroke="#604a20" stroke-width="0.6"/>
+        <!-- Strap attachment loops -->
+        <rect x="95" y="170" width="14" height="20" rx="1" fill="#5a3a22" stroke="#2a1a0c" stroke-width="0.5"/>
+        <rect x="291" y="170" width="14" height="20" rx="1" fill="#5a3a22" stroke="#2a1a0c" stroke-width="0.5"/>
+        <!-- Tile placement: under-flap right -->
+        <g transform="translate(260, 175)">
+          <circle r="17" fill="#1f1208" stroke="#0a0805" stroke-width="0.6"/>
+          <circle r="16" fill="#2c1a0c"/>
+          <g transform="scale(0.30) translate(-50, -50)" opacity="0.95">
+            ${motifSvg('#d4a574', 1.8)}
+          </g>
+          <line x1="0" y1="-17" x2="20" y2="-60" stroke="#d4a574" stroke-width="0.4" stroke-dasharray="2,2"/>
+          <text x="22" y="-64" font-family="JetBrains Mono, monospace" font-size="8" fill="#d4a574" letter-spacing="1.5">PATTERN TILE</text>
+          <text x="22" y="-53" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#d4a574">Ø 30 mm</text>
+        </g>
+      </svg>`,
+  },
+};
+
+function initGarment() {
+  document.querySelectorAll('.garment-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.garment-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentGarment = btn.dataset.garment;
+      updateGarmentMockup();
+    });
+  });
+}
+
+function updateGarmentMockup() {
+  const mockup = $('garment-mockup');
+  const garment = GARMENTS[currentGarment];
+  if (!mockup || !garment) return;
+  // Default to rose if nothing selected
+  const motif = MOTIFS.find(m => m.id === currentMotifId) || MOTIFS[0];
+  const accentColor = '#b8472b';
+
+  mockup.innerHTML = garment.svg(motif.svg, accentColor);
+
+  // Update spec
+  const id = currentMotifFieldId
+    ? fmtId(currentMotifFieldId)
+    : '— mint one in the Motif tab';
+  $('garment-spec-id').textContent = id;
+  $('garment-spec-motif').textContent = motif.name;
+  $('garment-spec-placement').textContent = garment.placement;
+
+  // Render the detail tile in 3D (always show even without explicit motif selection)
+  const ch = currentMotifChannels || encodeId(0x2DCA3791);
+  const field = buildHeightField(ch, 0);
+  if (currentMotifId) bakeMotifEngraving(field, currentMotifId, RES, RADIUS_MM, ch);
+  else bakeMotifEngraving(field, MOTIFS[0].id, RES, RADIUS_MM, ch);
+  if (!garmentTile) {
+    garmentTile = new Tile3D($('canvas-3d-garment'));
+    garmentTile.start();
+  }
+  const palette = PALETTES.find(p => p.id === currentPaletteId);
+  setTimeout(() => garmentTile.setField(field, RES, RADIUS_MM, palette), 50);
+}
+
+
+// ============================================================================
+// TAB SWITCHING
+// ============================================================================
+function initTabs() {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      $(`panel-${target}`).classList.add('active');
+      if (target === 'garment') updateGarmentMockup();
+      if (target === 'compose') renderCompose();
+      // Trigger resize on visible 3D canvases
+      setTimeout(() => {
+        if (parametricTile) parametricTile.resize();
+        if (drawTile) drawTile.resize();
+        if (photoTile) photoTile.resize();
+        if (motifTile) motifTile.resize();
+        if (garmentTile) garmentTile.resize();
+      }, 50);
+    });
+  });
+}
+
+// ============================================================================
+// BOOT
+// ============================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initMotif();
+  initParametric();
+  initDraw();
+  initPhoto();
+  initCompose();
+  initScan();
+  initGarment();
+  initOrder();
+});
+</script>
+</body>
+</html>
+
